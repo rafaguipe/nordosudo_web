@@ -1,4 +1,4 @@
-# Nordosudo Website
+# Nordosudo Website - 19/6/2026
 
 Site oficial da Nordosudo — plataforma boutique de internacionalização para alimentos e bebidas não alcoólicas.
 
