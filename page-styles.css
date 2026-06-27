@@ -458,6 +458,33 @@
   margin-bottom: 24px;
 }
 
+/* --- ZOHO BIGIN EMBED OVERRIDE --- */
+html {
+  font-size: 16px !important;
+}
+
+#zoho-boraexportar-form {
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+}
+
+#zoho-boraexportar-form * {
+  font-family: var(--font-sans) !important;
+  font-size: inherit !important;
+}
+
+#zoho-boraexportar-form input,
+#zoho-boraexportar-form select,
+#zoho-boraexportar-form textarea {
+  font-size: 0.95rem !important;
+  padding: 12px 16px !important;
+}
+
+#zoho-boraexportar-form label {
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+}
+
 /* --- ACTIVE NAV LINK --- */
 .nav-links a.active {
   color: var(--gold) !important;

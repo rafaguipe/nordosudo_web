@@ -12,8 +12,8 @@ Site oficial da Nordosudo — plataforma boutique de internacionalização para 
 | Página | Arquivo | Descrição |
 |---|---|---|
 | Home | `index.html` | Landing page com visão geral dos produtos |
-| #BoraExportar | `boraexportar.html` | Prontidão e estruturação exportadora |
-| US Market Development | `usmarket.html` | Construção de presença comercial nos EUA |
+| BoraExportar | `boraexportar.html` | Prontidão e estruturação exportadora |
+| BoraUSA | `usmarket.html` | Construção de presença comercial nos EUA |
 | Quem Somos | `quem-somos.html` | Sobre a Nordosudo |
 | Contato | `contato.html` | Formulário de contato |
 
@@ -50,8 +50,8 @@ Site oficial da Nordosudo — plataforma boutique de internacionalização para 
 ```
 nordosudo_web/
 ├── index.html              # Home
-├── boraexportar.html       # Produto #BoraExportar
-├── usmarket.html           # Produto US Market Development
+├── boraexportar.html       # Produto BoraExportar
+├── usmarket.html           # Produto BoraUSA
 ├── quem-somos.html         # Quem Somos
 ├── contato.html            # Contato
 ├── styles.css              # Estilos globais

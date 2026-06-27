@@ -40,10 +40,10 @@
       </a>
       <ul class="nav-links" id="navLinks">
         <li><a href="index.html">Home</a></li>
-        <li><a href="boraexportar.html">#BoraExportar</a></li>
-        <li><a href="usmarket.html">US Market Development</a></li>
+        <li><a href="boraexportar.html">BoraExportar</a></li>
+        <li><a href="usmarket.html">BoraUSA</a></li>
         <li><a href="quem-somos.html">Quem Somos</a></li>
-        <li><a href="contato.html" class="nav-cta active">Contato</a></li>
+        <li><a href="contato.html" class="nav-cta active" style="color: #0B1D3A !important; background: #C9A84C !important;">Contato</a></li>
       </ul>
       <button class="nav-toggle" id="navToggle" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -66,50 +66,8 @@
     <div class="container">
       <div class="contact-grid">
         <div class="contact-form-wrap">
-          <form class="contact-form" id="contactForm" action="https://formsubmit.co/comercial@nordosudo.com.br" method="POST">
-            <input type="hidden" name="_subject" value="Novo contato — Nordosudo Website">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_next" value="https://nordosudo.com/contato.html?enviado=1">
-            <input type="text" name="_honey" style="display:none">
-
-            <div class="form-group">
-              <label for="nome">Nome *</label>
-              <input type="text" id="nome" name="nome" required placeholder="Seu nome completo">
-            </div>
-
-            <div class="form-group">
-              <label for="empresa">Empresa *</label>
-              <input type="text" id="empresa" name="empresa" required placeholder="Nome da sua empresa">
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="pais">País *</label>
-                <input type="text" id="pais" name="pais" required placeholder="Brasil">
-              </div>
-              <div class="form-group">
-                <label for="email">E-mail *</label>
-                <input type="email" id="email" name="email" required placeholder="seu@email.com">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="momento">Qual é o seu momento? *</label>
-              <select id="momento" name="momento" required>
-                <option value="" disabled selected>Selecione uma opção</option>
-                <option value="demanda-exterior">Já tenho demanda no exterior</option>
-                <option value="entrar-eua">Quero entrar nos EUA</option>
-                <option value="outro">Outro</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="mensagem">Mensagem (opcional)</label>
-              <textarea id="mensagem" name="mensagem" rows="4" placeholder="Conte brevemente sobre sua empresa e objetivos..."></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-full">Enviar mensagem</button>
-          </form>
+          <div id="zoho-boraexportar-form"></div>
+          <script id='formScript6398724000001968151' src='https://us.bigin.online/org860343872/forms/boraexportar?script=$sYG'></script>
         </div>
 
         <div class="contact-info">
@@ -129,8 +87,8 @@
             <h3>Produtos</h3>
             <p class="info-text">Não sabe qual produto é ideal para sua empresa? Sem problema — entre em contato e vamos juntos identificar o melhor caminho.</p>
             <div class="info-links">
-              <a href="boraexportar.html">#BoraExportar →</a>
-              <a href="usmarket.html">US Market Development →</a>
+              <a href="boraexportar.html">BoraExportar →</a>
+              <a href="usmarket.html">BoraUSA →</a>
             </div>
           </div>
         </div>
@@ -148,8 +106,8 @@
         </div>
         <div class="footer-links">
           <a href="index.html">Home</a>
-          <a href="boraexportar.html">#BoraExportar</a>
-          <a href="usmarket.html">US Market Development</a>
+          <a href="boraexportar.html">BoraExportar</a>
+          <a href="usmarket.html">BoraUSA</a>
           <a href="quem-somos.html">Quem Somos</a>
           <a href="contato.html">Contato</a>
         </div>
@@ -163,13 +121,19 @@
 
   <script src="script.js"></script>
   <script>
-    // Show success message if form was submitted
-    if (window.location.search.includes('enviado=1')) {
-      var form = document.getElementById('contactForm');
-      if (form) {
-        form.innerHTML = '<div class="form-success"><div class="success-icon">✓</div><h3>Mensagem enviada!</h3><p>Obrigado pelo contato. Retornaremos em breve.</p><a href="index.html" class="btn btn-outline">Voltar ao início</a></div>';
+    // Proteção contra Zoho Bigin reduzir font-size global
+    (function() {
+      function fixFontSize() {
+        document.documentElement.style.fontSize = '16px';
+        document.body.style.fontSize = '16px';
       }
-    }
+      fixFontSize();
+      var observer = new MutationObserver(fixFontSize);
+      observer.observe(document.documentElement, { attributes: true, attributeStyle: ['style'] });
+      var interval = setInterval(fixFontSize, 200);
+      setTimeout(function() { clearInterval(interval); }, 8000);
+      window.addEventListener('load', fixFontSize);
+    })();
   </script>
 <script type="application/ld+json">
 {
