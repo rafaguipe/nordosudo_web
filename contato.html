@@ -4,18 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contato | Nordosudo</title>
-  <meta name="description" content="Entre em contato com a Nordosudo. Conte em qual momento sua empresa está e vamos indicar o caminho certo para a internacionalização.">
+  <meta name="description" content="Entre em contato com a Nordosudo. Parcerias, fornecedores, imprensa e assuntos gerais.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://nordosudo.com/contato.html">
   <meta property="og:title" content="Contato | Nordosudo">
-  <meta property="og:description" content="Entre em contato com a Nordosudo. Conte em qual momento sua empresa está e vamos indicar o caminho certo para a internacionalização.">
+  <meta property="og:description" content="Entre em contato com a Nordosudo. Parcerias, fornecedores, imprensa e assuntos gerais.">
   <meta property="og:type" content="contact">
   <meta property="og:url" content="https://nordosudo.com/contato.html">
   <meta property="og:site_name" content="Nordosudo">
   <meta property="og:locale" content="pt_BR">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Contato | Nordosudo">
-  <meta name="twitter:description" content="Entre em contato com a Nordosudo. Conte em qual momento sua empresa está e vamos indicar o caminho certo para a internacionalização.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -56,25 +54,27 @@
     <div class="hero-bg"></div>
     <div class="container hero-content">
       <p class="section-label">Contato</p>
-      <h1 class="hero-title">Vamos conversar.</h1>
-      <p class="hero-subtitle">Conte em qual momento a sua empresa está. Vamos indicar o produto certo.</p>
+      <h1 class="hero-title">Como podemos ajudar?</h1>
+      <p class="hero-subtitle">Parcerias, fornecedores, imprensa ou assuntos gerais. Esta é a porta de entrada institucional.</p>
     </div>
   </section>
 
-  <!-- FORM + INFO -->
+  <!-- INFORMAÇÕES DE CONTATO -->
   <section class="page-section">
     <div class="container">
       <div class="contact-grid">
-        <div class="contact-form-wrap">
-          <div id="zoho-boraexportar-form"></div>
-          <script id='formScript6398724000001968151' src='https://us.bigin.online/org860343872/forms/boraexportar?script=$sYG'></script>
-        </div>
 
-        <div class="contact-info">
+        <!-- Coluna principal: Informações -->
+        <div class="contact-info-page">
+
           <div class="info-card">
-            <h3>Informações de contato</h3>
+            <h3>Geral</h3>
             <div class="info-item">
               <span class="info-label">E-mail</span>
+              <a href="mailto:contato@nordosudo.com.br">contato@nordosudo.com.br</a>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Comercial</span>
               <a href="mailto:comercial@nordosudo.com.br">comercial@nordosudo.com.br</a>
             </div>
             <div class="info-item">
@@ -84,14 +84,45 @@
           </div>
 
           <div class="info-card">
-            <h3>Produtos</h3>
-            <p class="info-text">Não sabe qual produto é ideal para sua empresa? Sem problema — entre em contato e vamos juntos identificar o melhor caminho.</p>
+            <h3>Produtos &amp; Avaliações</h3>
+            <p class="info-text">Sua empresa quer internacionalizar? Solicite uma avaliação de prontidão — sem compromisso.</p>
             <div class="info-links">
-              <a href="boraexportar.html">BoraExportar →</a>
-              <a href="usmarket.html">BoraUSA →</a>
+              <a href="avaliacao-boraexportar.html">Avaliação BoraExportar &rarr;</a>
+              <a href="avaliacao-borausa.html">Avaliação BoraUSA &rarr;</a>
             </div>
           </div>
+
+          <div class="info-card">
+            <h3>Parcerias &amp; Institucional</h3>
+            <p class="info-text">Fornecedores, mídia, investidores ou outros interesses institucionais: este é o canal. Respondemos em at&eacute; 2 dias &uacute;teis.</p>
+          </div>
+
         </div>
+
+        <!-- Coluna lateral: Formulário simples de contato -->
+        <div class="contact-form-column">
+          <h3>Enviar mensagem</h3>
+          <form class="simple-contact-form" action="#" method="post">
+            <label for="sc-name">Nome</label>
+            <input type="text" id="sc-name" name="name" required placeholder="Seu nome">
+            <label for="sc-email">E-mail</label>
+            <input type="email" id="sc-email" name="email" required placeholder="seu@email.com">
+            <label for="sc-company">Empresa <span class="optional">(opcional)</span></label>
+            <input type="text" id="sc-company" name="company" placeholder="Nome da empresa">
+            <label for="sc-subject">Assunto</label>
+            <select id="sc-subject" name="subject" required>
+              <option value="">Selecione um assunto</option>
+              <option value="imprensa">Imprensa</option>
+              <option value="parceria">Parceria</option>
+              <option value="fornecedor">Fornecedor</option>
+              <option value="outro">Outro</option>
+            </select>
+            <label for="sc-message">Mensagem</label>
+            <textarea id="sc-message" name="message" rows="5" required placeholder="Como podemos ajudar?"></textarea>
+            <button type="submit" class="btn btn-primary">Enviar mensagem</button>
+          </form>
+        </div>
+
       </div>
     </div>
   </section>
@@ -113,28 +144,13 @@
         </div>
         <div class="footer-bottom">
           <span>&copy; 2026 Nordosudo. Todos os direitos reservados.</span>
-          <a href="#">Política de Privacidade</a>
+          <a href="#">Pol&iacute;tica de Privacidade</a>
         </div>
       </div>
     </div>
   </footer>
 
   <script src="script.js"></script>
-  <script>
-    // Proteção contra Zoho Bigin reduzir font-size global
-    (function() {
-      function fixFontSize() {
-        document.documentElement.style.fontSize = '16px';
-        document.body.style.fontSize = '16px';
-      }
-      fixFontSize();
-      var observer = new MutationObserver(fixFontSize);
-      observer.observe(document.documentElement, { attributes: true, attributeStyle: ['style'] });
-      var interval = setInterval(fixFontSize, 200);
-      setTimeout(function() { clearInterval(interval); }, 8000);
-      window.addEventListener('load', fixFontSize);
-    })();
-  </script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -142,8 +158,13 @@
   "name": "Nordosudo",
   "url": "https://nordosudo.com",
   "logo": "https://nordosudo.com/assets/logo.png",
-  "description": "Plataforma boutique de internacionalização para alimentos e bebidas não alcoólicas.",
-  "email": "comercial@nordosudo.com.br",
+  "description": "Plataforma boutique de internacionalização para alimentos e bebidas n&atilde;o alco&oacute;licas.",
+  "email": "contato@nordosudo.com.br",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "email": "contato@nordosudo.com.br"
+  },
   "sameAs": []
 }
 </script>
