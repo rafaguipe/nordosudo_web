@@ -700,6 +700,28 @@ html {
   font-weight: 600 !important;
 }
 
+#zoho-borausa-form {
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+}
+
+#zoho-borausa-form * {
+  font-family: var(--font-sans) !important;
+  font-size: inherit !important;
+}
+
+#zoho-borausa-form input,
+#zoho-borausa-form select,
+#zoho-borausa-form textarea {
+  font-size: 0.95rem !important;
+  padding: 12px 16px !important;
+}
+
+#zoho-borausa-form label {
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+}
+
 /* --- ACTIVE NAV LINK --- */
 .nav-links a.active {
   color: var(--gold) !important;
