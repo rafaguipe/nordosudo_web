@@ -68,7 +68,31 @@
         <p class="body-text">Preencha os dados abaixo. Nossa equipe analisará o perfil da sua empresa e entrará em contato em até 2 dias úteis.</p>
       </div>
       <div class="assessment-form-wrapper">
-        <iframe src="https://bigin.zoho.com/crm/PublicForm/63474232b3c22e7c848568d2e34b2c2d8b282a88e58998d898f19276e7ec8a6e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d7a8e1b7b2e6d?iframe=true" width="100%" height="1200" frameborder="0" allowfullscreen></iframe>
+        <div id="zoho-boraexportar-form"></div>
+        <script id='formScript6398724000001968151' src='https://us.bigin.online/org860343872/forms/boraexportar?script=$sYG'></script>
+        <script>
+          (function() {
+            var observer = new MutationObserver(function() {
+              var html = document.documentElement;
+              var body = document.body;
+              if (html.style.fontSize !== '16px') html.style.cssText += '; font-size: 16px !important;';
+              if (body.style.fontSize !== '16px') body.style.cssText += '; font-size: 16px !important;';
+              var form = document.getElementById('zoho-boraexportar-form');
+              if (form) form.style.fontSize = '16px !important';
+            });
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
+            observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
+            var interval = setInterval(function() {
+              document.documentElement.style.fontSize = '16px';
+              document.body.style.fontSize = '16px';
+              var form = document.getElementById('zoho-boraexportar-form');
+              if (form) form.style.fontSize = '16px';
+            }, 200);
+            window.addEventListener('load', function() {
+              setTimeout(function() { clearInterval(interval); }, 8000);
+            });
+          })();
+        </script>
       </div>
     </div>
   </section>
