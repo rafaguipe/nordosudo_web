@@ -10,6 +10,7 @@
   const SCROLL_THRESHOLD = 60;
 
   function onScroll() {
+    if (!navbar) return;
     if (window.scrollY > SCROLL_THRESHOLD) {
       navbar.classList.add('scrolled');
     } else {
@@ -17,45 +18,49 @@
     }
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  if (navbar) {
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
 
   /* --- MOBILE MENU --- */
-  const navToggle = document.getElementById('navToggle');
-  const navLinks = document.getElementById('navLinks');
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
 
-  function toggleMenu() {
-    navToggle.classList.toggle('active');
-    navLinks.classList.toggle('open');
-    document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
-  }
-
-  function closeMenu() {
-    navToggle.classList.remove('active');
-    navLinks.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  navToggle.addEventListener('click', toggleMenu);
-
-  // Close on link click
-  navLinks.querySelectorAll('a').forEach(function (link) {
-    link.addEventListener('click', closeMenu);
-  });
-
-  // Close on outside click
-  document.addEventListener('click', function (e) {
-    if (navLinks.classList.contains('open') &&
-        !navLinks.contains(e.target) &&
-        !navToggle.contains(e.target)) {
-      closeMenu();
+  if (navToggle && navLinks) {
+    function toggleMenu() {
+      navToggle.classList.toggle('active');
+      navLinks.classList.toggle('open');
+      document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
     }
-  });
 
-  // Close on Escape
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeMenu();
-  });
+    function closeMenu() {
+      navToggle.classList.remove('active');
+      navLinks.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    navToggle.addEventListener('click', toggleMenu);
+
+    // Close on link click
+    navLinks.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Close on outside click
+    document.addEventListener('click', function (e) {
+      if (navLinks.classList.contains('open') &&
+          !navLinks.contains(e.target) &&
+          !navToggle.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeMenu();
+    });
+  }
 
   /* --- SMOOTH SCROLL for anchor links --- */
   document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
