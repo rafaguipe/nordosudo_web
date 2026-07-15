@@ -108,6 +108,24 @@
     });
   }
 
+  /* --- FAQ ACCORDION --- */
+  document.querySelectorAll('.faq-question').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = this.closest('.faq-item');
+      if (!item) return;
+
+      // Optional: close others in same section
+      var section = item.closest('.faq-section');
+      if (section) {
+        section.querySelectorAll('.faq-item.open').forEach(function (other) {
+          if (other !== item) other.classList.remove('open');
+        });
+      }
+
+      item.classList.toggle('open');
+    });
+  });
+
   /* --- PARALLAX: subtle hero grid movement --- */
   const hero = document.querySelector('.hero');
   const heroBg = document.querySelector('.hero-bg');
