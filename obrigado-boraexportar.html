@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Solicitação Recebida — Diagnóstico de Prontidão Exportadora | Nordosudo</title>
-  <meta name="description" content="Recebemos sua solicitação de diagnóstico. Nossa equipe fará uma análise inicial da sua empresa e retornará o contato em até 1 dia útil. Ou agende imediatamente uma reunião.">
+  <title>Excelente. Agora vamos avançar. — Diagnóstico de Prontidão Exportadora | Nordosudo</title>
+  <meta name="description" content="Seu diagnóstico de prontidão exportadora está em andamento. Enquanto nossa equipe prepara a análise, agende uma conversa direta de 30 minutos e acelere o processo.">
   <meta name="robots" content="noindex, nofollow">
   <link rel="canonical" href="https://nordosudo.com/obrigado-boraexportar.html">
-  <meta property="og:title" content="Diagnóstico de Prontidão Exportadora Recebido — Nordosudo">
-  <meta property="og:description" content="Recebemos sua solicitação. Sua análise de prontidão exportadora já está na fila. Agende uma conversa imediata com nossa equipe.">
+  <meta property="og:title" content="Diagnóstico de Prontidão Exportadora — Nordosudo">
+  <meta property="og:description" content="Sua solicitação foi recebida. Avance imediatamente com uma conversa estratégica de 30 minutos com nossa equipe.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://nordosudo.com/obrigado-boraexportar.html">
   <meta property="og:site_name" content="Nordosudo">
@@ -20,7 +20,37 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="page-styles.css">
 
-  <!-- Google Analytics 4 -->
+  <!--
+    ============================================================
+    GOOGLE ANALYTICS 4 — Eventos da Página de Obrigado
+    ============================================================
+
+    EVENTO 1: thankyou_page_viewed
+    Disparado: ao carregar a página
+    Função: mede quantas pessoas chegam nesta página
+             (conversão primária do formulário)
+    Uso: criar audiência no Google Ads "Visitou página de obrigado"
+         e medir taxa de conversão formulário → página
+
+    EVENTO 2: booking_click
+    Disparado: clique no botão "Agendar Diagnóstico"
+    Função: mede quantas pessoas avançam para o booking
+    Uso: calcular taxa de conversão página → agendamento
+         (métrica central desta página)
+
+    EVENTO 3: booking_confirmed (reservado)
+    A implementar quando o Bigin Bookings suportar
+    webhook de confirmação de agendamento.
+    Função: mede quantos agendamentos foram concluídos
+             com sucesso (não apenas cliques).
+
+    DASHBOARD RECOMENDADO:
+    - Taxa de conversão: thankyou_page_viewed → booking_click
+    - Taxa de booking real: thankyou_page_viewed → booking_confirmed
+    - Origem: cruzar com utm_source do Google Ads/LinkedIn
+      para identificar qual canal gera agendamentos mais qualificados
+    ============================================================
+  -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-67WRFL96L2"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -28,7 +58,7 @@
     gtag('js', new Date());
     gtag('config', 'G-67WRFL96L2');
 
-    // EVENT 1: Thank-you page loaded (conversion)
+    // EVENT 1: Página carregada (conversão primária)
     gtag('event', 'thankyou_page_viewed', {
       'event_category': 'conversion',
       'event_label': 'obrigado_boraexportar',
@@ -38,158 +68,227 @@
 </head>
 <body>
 
-  <!-- HEADER: Brand only — zero navigation distractions -->
-  <header class="thankyou-header" id="thankyouHeader">
+  <!--
+    HEADER — Apenas marca, zero navegação
+    Decisão CRO: remover menu e links reduz distrações.
+    O usuário deve ter UM único caminho: agendar.
+  -->
+  <header class="thankyou-header" id="thankyouHeader" role="banner">
     <div class="container nav-inner">
-      <a href="https://nordosudo.com" class="nav-logo">
+      <a href="https://nordosudo.com" class="nav-logo" aria-label="Nordosudo — Página inicial">
         <span class="logo-text">NORDOSUDO</span>
       </a>
     </div>
   </header>
 
-  <!-- CONFIRMATION HERO -->
-  <section class="page-hero small">
+  <!--
+    HERO — Confirmação e sensação de progresso
+    Título: transmite movimento imediato, não espera passiva.
+    Copy: reframed para mostrar que o processo já começou
+    em paralelo — o usuário não precisa "esperar", pode agir agora.
+  -->
+  <section class="page-hero small" aria-labelledby="hero-title">
     <div class="hero-bg"></div>
     <div class="container hero-content" style="text-align: center; max-width: 720px;">
       <div class="form-success" style="margin: 30px 0 0;">
-        <div class="success-icon">&#10003;</div>
-        <h1 class="hero-title" style="font-size: clamp(1.8rem, 3.5vw, 2.5rem);">Solicitação recebida</h1>
-        <p class="confirmation-text">
-          Sua empresa está no caminho certo. Recebemos suas informações e nossa equipe de
-          inteligência de mercado fará uma análise inicial do perfil da sua empresa.
+        <div class="success-icon" aria-hidden="true">&#10003;</div>
+        <h1 class="hero-title" id="hero-title" style="font-size: clamp(1.8rem, 3.5vw, 2.5rem);">
+          Excelente. Agora vamos avançar.
+        </h1>
+        <p class="confirmation-text" style="font-size: 1.05rem;">
+          Sua solicitação de diagnóstico foi recebida. Em paralelo, nossa equipe já iniciou
+          a análise preliminar do perfil da sua empresa — enquanto isso, você pode dar o
+          próximo passo imediatamente.
         </p>
-        <p class="confirmation-text" style="margin-top: 12px;">
-          Entraremos em contato o mais breve possível — normalmente realizamos o primeiro
-          contato em até <strong>1 dia útil</strong>.
-        </p>
-        <p class="confirmation-note">
-          Enquanto isso, conheça seu diagnóstico antes. Agende uma conversa direta abaixo.
+        <p class="confirmation-text" style="margin-top: 16px; color: var(--gray-600);">
+          <strong>O processo já começou.</strong> Agende uma conversa direta abaixo e
+          acelere seu diagnóstico de prontidão exportadora.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- BOOKING CTA — Capitalizar impulso imediato -->
-  <section class="booking-cta-section">
+  <!--
+    PROGRESS BAR — Onde o usuário está no funil
+    Elegante, minimal, sinaliza progresso concreto.
+    Step 1: completed (informações enviadas)
+    Step 2: current (agendamento — ação esperada)
+    Steps 3-4: future (diagnóstico, próximos passos)
+  -->
+  <section class="progress-section" aria-label="Progresso do seu diagnóstico">
+    <div class="container">
+      <div class="progress-track" role="progressbar" aria-label="Etapas do diagnóstico" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-step completed">
+          <span class="progress-dot" aria-hidden="true">✓</span>
+          <span class="progress-label">Informações enviadas</span>
+        </div>
+        <div class="progress-connector filled" aria-hidden="true"></div>
+        <div class="progress-step current">
+          <span class="progress-dot" aria-hidden="true">2</span>
+          <span class="progress-label" style="font-weight: 600;">Agendamento</span>
+        </div>
+        <div class="progress-connector" aria-hidden="true"></div>
+        <div class="progress-step future">
+          <span class="progress-dot" aria-hidden="true">3</span>
+          <span class="progress-label">Diagnóstico</span>
+        </div>
+        <div class="progress-connector" aria-hidden="true"></div>
+        <div class="progress-step future">
+          <span class="progress-dot" aria-hidden="true">4</span>
+          <span class="progress-label">Próximos passos</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    BOOKING CTA — Ação principal da página
+    Capitalizar o impulso imediato pós-formulário.
+    Explica o que acontece para reduzir ansiedade,
+    depois coloca o botão de agendamento com
+    disclaimer "sem compromisso comercial".
+  -->
+  <section class="booking-cta-section" aria-labelledby="booking-title">
     <div class="container">
       <div class="booking-cta-inner">
 
         <p class="section-label" style="margin-bottom: 12px;">Acelere seu diagnóstico</p>
-        <h2 class="section-title" style="font-size: clamp(1.6rem, 3vw, 2.2rem);">Prefere não esperar?</h2>
+        <h2 class="section-title" id="booking-title" style="font-size: clamp(1.6rem, 3vw, 2.2rem);">
+          Prefere não esperar?
+        </h2>
         <p class="booking-subtitle">
           Escolha diretamente um horário em nossa agenda e inicie imediatamente
           seu diagnóstico de prontidão exportadora.
         </p>
 
-        <!-- O que acontece nesta conversa -->
+        <!-- O que acontece na reunião (5 itens) -->
         <div class="what-happens">
-          <h3>O que acontece nesta conversa?</h3>
+          <h3 style="font-size: 1rem; margin-bottom: 20px; color: rgba(255,255,255,0.7);">
+            O que acontece nesta conversa?
+          </h3>
 
           <div class="what-happens-item">
-            <span class="what-happens-check">✓</span>
+            <span class="what-happens-check" aria-hidden="true">✓</span>
             <p><strong>Entender o momento da sua empresa</strong> — mapeamos seu estágio atual, maturidade internacional e ambições de crescimento.</p>
           </div>
 
           <div class="what-happens-item">
-            <span class="what-happens-check">✓</span>
+            <span class="what-happens-check" aria-hidden="true">✓</span>
             <p><strong>Avaliar sua prontidão exportadora</strong> — analisamos produto, capacidade produtiva, compliance regulatório e adequação aos mercados-alvo.</p>
           </div>
 
           <div class="what-happens-item">
-            <span class="what-happens-check">✓</span>
-            <p><strong>Discutir próximos passos</strong> — traçamos um roteiro preliminar de internacionalização ajustado à realidade da sua empresa.</p>
+            <span class="what-happens-check" aria-hidden="true">✓</span>
+            <p><strong>Identificar oportunidades</strong> — detectamos gaps, vantagens competitivas e os caminhos mais promissores para sua internacionalização.</p>
           </div>
 
           <div class="what-happens-item">
-            <span class="what-happens-check">✓</span>
+            <span class="what-happens-check" aria-hidden="true">✓</span>
             <p><strong>Esclarecer dúvidas</strong> — tudo que você sempre quis saber sobre exportar, respondido por quem vive o mercado internacional.</p>
           </div>
 
-          <p style="font-size: 0.85rem; color: rgba(255,255,255,0.4); text-align: center; margin-top: 20px;">
+          <div class="what-happens-item">
+            <span class="what-happens-check" aria-hidden="true">✓</span>
+            <p><strong>Orientar os próximos passos</strong> — traçamos um roteiro preliminar de internacionalização ajustado à realidade da sua empresa.</p>
+          </div>
+
+          <p style="font-size: 0.85rem; color: rgba(255,255,255,0.35); text-align: center; margin-top: 20px;">
             Duração estimada: 30 minutos · Online · Sem custo
           </p>
         </div>
 
-        <!-- Bigin Bookings -->
+        <!-- Bigin Bookings — link oficial de agendamento -->
         <a href="https://us.bigin.online/org860343872/bookings/nordosudo#/"
            class="btn btn-primary"
            style="font-size: 1.05rem; padding: 16px 48px;"
            id="bookBoraExportarBtn"
            target="_blank"
-           rel="noopener noreferrer">
+           rel="noopener noreferrer"
+           aria-label="Agendar diagnóstico de prontidão exportadora — abre em nova janela">
           Agendar Diagnóstico
         </a>
 
-        <!-- Sem compromisso -->
-        <div class="no-commitment">
+        <!-- Disclaimer: sem compromisso comercial -->
+        <div class="no-commitment" role="note">
           <strong>Sem compromisso comercial.</strong> O objetivo desta conversa é entender sua
-          empresa e avaliar se faz sentido construir, juntos, um projeto de internacionalização.
+          empresa e avaliar se faz sentido construirmos, juntos, um projeto de internacionalização.
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- POR QUE CONVERSAR CONOSCO -->
-  <section class="page-section" id="por-que-nos">
+  <!--
+    CREDENCIAIS — Por que conversar conosco?
+    Constrói autoridade sem arrogância.
+    Cards com detalhes específicos: PhD, MBA, P&D,
+    Qualidade, Supply Chain, Operações.
+    3 cards organizam os elementos em mensagens digeríveis.
+  -->
+  <section class="page-section" id="por-que-nos" aria-labelledby="credenciais-title">
     <div class="container">
       <div class="section-header center" style="margin-bottom: 48px;">
         <p class="section-label">Credenciais</p>
-        <h2 class="section-title">Por que conversar conosco?</h2>
+        <h2 class="section-title" id="credenciais-title">Por que conversar conosco?</h2>
       </div>
 
       <div class="credentials-grid">
         <div class="credential-card">
-          <div class="credential-icon">
+          <div class="credential-icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="8" r="5"></circle>
               <path d="M3 21v-2a7 7 0 0 1 7-7h4a7 7 0 0 1 7 7v2"></path>
             </svg>
           </div>
-          <h3>25+ anos de experiência</h3>
-          <p>Atuação direta em desenvolvimento de mercados internacionais para alimentos, bebidas e ingredientes. Conhecimento construído na prática, não em teoria.</p>
+          <h3>25+ anos em internacionalização</h3>
+          <p>PhD e MBA com atuação direta em <strong>P&amp;D</strong>, <strong>Qualidade</strong>, <strong>Supply Chain</strong> e <strong>Operações</strong>. Experiência construída em indústrias de alimentos nos cinco continentes — da planta à gôndola.</p>
         </div>
 
         <div class="credential-card">
-          <div class="credential-icon">
+          <div class="credential-icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
             </svg>
           </div>
-          <h3>Especialização setorial</h3>
-          <p>Foco exclusivo em food & beverage. Conhecemos os reguladores, os compradores, as feiras e as particularidades de cada mercado para o setor.</p>
+          <h3>Especialização em Food &amp; Beverage</h3>
+          <p>Foco exclusivo em alimentos, bebidas e ingredientes. Conhecemos os reguladores sanitários, os compradores internacionais, as feiras setoriais e as particularidades de cada mercado para o setor.</p>
         </div>
 
         <div class="credential-card">
-          <div class="credential-icon">
+          <div class="credential-icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
             </svg>
           </div>
-          <h3>BoraExportar + BoraUSA</h3>
-          <p>Duas frentes complementares: prontidão exportadora e presença nos Estados Unidos. Um ecossistema completo de internacionalização.</p>
+          <h3>Ecossistema completo de internacionalização</h3>
+          <p><strong>BoraExportar</strong> para prontidão exportadora e <strong>BoraUSA</strong> para desenvolvimento estruturado do mercado americano. Duas frentes complementares que cobrem do diagnóstico inicial à presença nos EUA.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FAQ — Remover objeções -->
-  <section class="page-section alt" id="faq">
+  <!--
+    FAQ — Remover objeções antes que surjam
+    Accordion, extremamente curta (4 perguntas).
+    Respostas objetivas e consultivas.
+    Gerencia as objeções mais comuns no momento do booking.
+  -->
+  <section class="page-section alt" id="faq" aria-labelledby="faq-title">
     <div class="container">
       <div class="section-header center">
         <p class="section-label">Perguntas Frequentes</p>
-        <h2 class="section-title">Esclareça suas dúvidas</h2>
+        <h2 class="section-title" id="faq-title">Esclareça suas dúvidas</h2>
       </div>
 
       <div class="faq-section">
         <div class="faq-item">
-          <button class="faq-question">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq1-answer">
             <span>A reunião tem custo?</span>
-            <span class="faq-icon">
+            <span class="faq-icon" aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </span>
           </button>
-          <div class="faq-answer">
+          <div class="faq-answer" id="faq1-answer" role="region" aria-labelledby="faq1-button">
             <div class="faq-answer-inner">
               Não. Esta conversa inicial é um diagnóstico gratuito, sem qualquer compromisso. Nosso objetivo é entender sua empresa e avaliar se há aderência para um projeto conjunto.
             </div>
@@ -197,13 +296,13 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq2-answer">
             <span>Quanto tempo dura a reunião?</span>
-            <span class="faq-icon">
+            <span class="faq-icon" aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </span>
           </button>
-          <div class="faq-answer">
+          <div class="faq-answer" id="faq2-answer" role="region" aria-labelledby="faq2-button">
             <div class="faq-answer-inner">
               Aproximadamente 30 minutos. Tempo suficiente para mapearmos seu momento atual, avaliar a prontidão exportadora e alinhar expectativas sobre os próximos passos.
             </div>
@@ -211,13 +310,13 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq3-answer">
             <span>Preciso já exportar para participar?</span>
-            <span class="faq-icon">
+            <span class="faq-icon" aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </span>
           </button>
-          <div class="faq-answer">
+          <div class="faq-answer" id="faq3-answer" role="region" aria-labelledby="faq3-button">
             <div class="faq-answer-inner">
               Não. O BoraExportar foi desenhado exatamente para empresas que estão dando os primeiros passos na exportação. Se você tem interesse, já é o suficiente. Nós avaliamos a prontidão e construímos o caminho juntos.
             </div>
@@ -225,15 +324,15 @@
         </div>
 
         <div class="faq-item">
-          <button class="faq-question">
-            <span>Minha empresa é pequena. O BoraExportar serve para mim?</span>
-            <span class="faq-icon">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq4-answer">
+            <span>Minha empresa é pequena. Serve para mim?</span>
+            <span class="faq-icon" aria-hidden="true">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </span>
           </button>
-          <div class="faq-answer">
+          <div class="faq-answer" id="faq4-answer" role="region" aria-labelledby="faq4-button">
             <div class="faq-answer-inner">
-              Sim. O tamanho não é o fator determinante — o que importa é o potencial do produto e a disposição para construir uma estratégia sólida. Muitas das empresas mais bem-sucedidas que ajudamos a internacionalizar começaram pequenas. O que faz a diferença é planejamento, execução e parceria certa.
+              Sim. O tamanho não é o fator determinante — o que importa é o potencial do produto e a disposição para construir uma estratégia sólida. Muitas das empresas mais bem-sucedidas que ajudamos a internacionalizar começaram pequenas. O que faz a diferença é planejamento, execução e a parceria certa.
             </div>
           </div>
         </div>
@@ -241,55 +340,70 @@
     </div>
   </section>
 
-  <!-- VIDEO PLACEHOLDER — Espaço reservado para vídeo institucional ~45s -->
-  <section class="page-section" id="video">
+  <!--
+    VÍDEO INSTITUCIONAL — Placeholder
+    Espaço reservado para vídeo ~45s com Rafael (CEO).
+    A ser gravado futuramente.
+    Substituir div.video-placeholder por iframe ou tag <video>
+    com o arquivo MP4 quando disponível.
+  -->
+  <section class="page-section" id="video" aria-labelledby="video-title">
     <div class="container">
       <div class="section-header center" style="margin-bottom: 40px;">
         <p class="section-label">Em breve</p>
-        <h2 class="section-title">Vídeo institucional</h2>
+        <h2 class="section-title" id="video-title">Vídeo institucional</h2>
       </div>
 
-      <div class="video-placeholder">
+      <div class="video-placeholder" role="region" aria-label="Espaço reservado para vídeo institucional">
         <div class="video-placeholder-content">
-          <div class="video-placeholder-icon">
+          <div class="video-placeholder-icon" aria-hidden="true">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="5 3 19 12 5 21 5 3"></polygon>
             </svg>
           </div>
           <p>Espaço reservado para futuro vídeo institucional<br>com Rafael, CEO da Nordosudo (~45 segundos)</p>
-          <p style="font-size: 0.75rem; color: var(--gray-300); margin-top: 8px; font-style: italic;">Instruções para inserir: substitua a div .video-placeholder por um iframe ou tag &lt;video&gt; com o arquivo MP4 do vídeo.</p>
+          <p style="font-size: 0.75rem; color: var(--gray-300); margin-top: 8px; font-style: italic;">
+            Substituir div.video-placeholder por iframe ou tag &lt;video&gt; com o arquivo MP4.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- TESTIMONIALS PLACEHOLDER — Espaço para depoimentos, cases e resultados -->
-  <section class="page-section alt" id="depoimentos">
+  <!--
+    DEPOIMENTOS E CASES — Placeholder
+    Espaço reservado para 3 elementos:
+    1. Depoimento de cliente (texto + foto + empresa + resultado)
+    2. Case de sucesso (narrativa de internacionalização)
+    3. Resultados e métricas (dados concretos)
+    Substituir os .testimonial-placeholder quando houver conteúdo real.
+  -->
+  <section class="page-section alt" id="depoimentos" aria-labelledby="testimonials-title">
     <div class="container">
       <div class="section-header center" style="margin-bottom: 48px;">
         <p class="section-label">Futuro</p>
-        <h2 class="section-title">Depoimentos e resultados</h2>
+        <h2 class="section-title" id="testimonials-title">Depoimentos e resultados</h2>
       </div>
 
       <div class="testimonials-grid">
-        <div class="testimonial-placeholder">
-          <div class="testimonial-placeholder-icon">
+        <div class="testimonial-placeholder" role="region" aria-label="Espaço reservado para depoimento de cliente">
+          <div class="testimonial-placeholder-icon" aria-hidden="true">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
               <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"></path>
             </svg>
           </div>
           <p>Depoimento de cliente será inserido aqui</p>
         </div>
-        <div class="testimonial-placeholder">
-          <div class="testimonial-placeholder-icon">
+        <div class="testimonial-placeholder" role="region" aria-label="Espaço reservado para case de sucesso">
+          <div class="testimonial-placeholder-icon" aria-hidden="true">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
             </svg>
           </div>
           <p>Case de sucesso será inserido aqui</p>
         </div>
-        <div class="testimonial-placeholder">
-          <div class="testimonial-placeholder-icon">
+        <div class="testimonial-placeholder" role="region" aria-label="Espaço reservado para resultados e métricas">
+          <div class="testimonial-placeholder-icon" aria-hidden="true">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="20" x2="12" y2="10"></line>
               <line x1="18" y1="20" x2="18" y2="4"></line>
@@ -302,8 +416,12 @@
     </div>
   </section>
 
-  <!-- FOOTER: Minimal — apenas marca -->
-  <footer class="thankyou-footer">
+  <!--
+    FOOTER — Minimal
+    Apenas copyright, sem navegação secundária.
+    Qualquer link extra é uma distração nesta página.
+  -->
+  <footer class="thankyou-footer" role="contentinfo">
     <div class="container">
       <div class="footer-inner">
         <div class="footer-bottom">
@@ -314,8 +432,15 @@
   </footer>
 
   <script src="script.js"></script>
+
+  <!--
+    GA4 EVENTOS DE INTERAÇÃO
+    ============================================================
+    EVENTO 2: booking_click
+    Disparado quando o usuário clica em "Agendar Diagnóstico".
+    Ação: abre Bigin Bookings em nova janela + dispara evento GA4.
+  -->
   <script>
-    // EVENT 2: Booking click
     document.getElementById('bookBoraExportarBtn').addEventListener('click', function() {
       gtag('event', 'booking_click', {
         'event_category': 'booking',
@@ -324,9 +449,34 @@
       });
     });
 
-    // EVENT 3: [Reservado para futura integração com confirmação de agendamento do Bigin]
-    // Implementar quando o Bigin Bookings suportar webhook de confirmação.
-    // Exemplo: gtag('event', 'booking_confirmed', { ... });
+    /*
+      EVENTO 3: booking_confirmed (RESERVADO)
+
+      A implementar quando o Bigin Bookings oferecer webhook
+      de confirmação de agendamento ou callback pós-agendamento.
+
+      Fluxo esperado:
+        1. Usuário clica em "Agendar Diagnóstico" → booking_click
+        2. Bigin Bookings carrega em nova janela
+        3. Usuário completa o agendamento no Bigin
+        4. Bigin dispara webhook para endpoint da Nordosudo
+        5. Endpoint dispara gtag('event', 'booking_confirmed', {...})
+
+      Código de exemplo (para referência futura):
+        fetch('/api/bigin-webhook', { method: 'POST', body: JSON.stringify(bookingData) })
+          .then(() => {
+            gtag('event', 'booking_confirmed', {
+              'event_category': 'booking',
+              'event_label': 'agendamento_concluido',
+              'value': 1
+            });
+          });
+
+      Dashboard recomendado no Google Analytics:
+        - Taxa booking_click / thankyou_page_viewed = % clique
+        - Taxa booking_confirmed / booking_click = % conclusão
+        - Origem: cruzar com utm_source para qualificar canais
+    */
   </script>
 
 </body>
