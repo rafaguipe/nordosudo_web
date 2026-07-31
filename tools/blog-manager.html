@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nordosudo · Blog Manager (ferramenta interna)</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  :root{--navy:#071224;--gold:#c9a227;--bg:#f4f2ed;--card:#fff;--txt:#1a1a1a;--mut:#6b7280;--ok:#15803d;--err:#b91c1c;--line:#e5e2da}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);font-size:14px;line-height:1.5}
+  header{background:var(--navy);color:#fff;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  header h1{font-size:17px;font-weight:700;letter-spacing:.3px}
+  header h1 span{color:var(--gold)}
+  header .warn{font-size:11.5px;color:#cbd5e1;max-width:560px}
+  main{max-width:1180px;margin:24px auto;padding:0 24px;display:grid;grid-template-columns:340px 1fr;gap:24px;align-items:start}
+  @media(max-width:900px){main{grid-template-columns:1fr}}
+  section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  section h2{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--mut);margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  label{display:block;font-size:12px;font-weight:600;color:var(--mut);margin:10px 0 4px}
+  input[type=text],input[type=date],input[type=password],textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit;background:#fff}
+  input:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:-1px;border-color:var(--gold)}
+  textarea{min-height:220px;resize:vertical;font-size:13.5px}
+  button{cursor:pointer;border:none;border-radius:8px;font-weight:600;font-size:13px;padding:9px 14px;transition:filter .15s}
+  button:hover{filter:brightness(.94)}
+  .btn-gold{background:var(--gold);color:var(--navy)}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
+  .btn-danger{background:#fee2e2;color:var(--err)}
+  .btn-ok{background:var(--ok);color:#fff}
+  .btn-sm{padding:5px 10px;font-size:12px;border-radius:6px}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .spacer{flex:1}
+  .hint{font-size:11.5px;color:var(--mut);margin-top:4px}
+  #posts{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto}
+  .post{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+  .post .pt{font-weight:600;font-size:13px}
+  .post .pm{font-size:11.5px;color:var(--mut);display:flex;gap:10px;flex-wrap:wrap}
+  .post.draft{background:#fbfaf6;border-style:dashed}
+  .post.draft .pm span:first-child{color:var(--gold);font-weight:700}
+  .post .pa{display:flex;gap:6px;flex-wrap:wrap}
+  #log{max-height:200px;overflow:auto;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:#0b1220;color:#a7f3d0;border-radius:8px;padding:10px;white-space:pre-wrap;word-break:break-word}
+  #log .err{color:#fca5a5}
+  .badge{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:100px;background:var(--navy);color:#fff}
+  .badge.draft-b{background:var(--gold);color:var(--navy)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:600px){.two{grid-template-columns:1fr}}
+  .filebtn{position:relative;overflow:hidden;display:inline-block}
+  .filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+  #imgName{font-size:11.5px;color:var(--mut)}
+  details{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:12px}
+  summary{cursor:pointer;font-weight:600;font-size:12.5px;color:var(--mut)}
+  #cardPrev{border:1px solid var(--line);border-radius:10px;overflow:hidden;max-width:380px}
+  #cardPrev .ci{aspect-ratio:16/9;background:#e5e2da;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:11px}
+  #cardPrev .ci img{width:100%;height:100%;object-fit:cover}
+  #cardPrev .cb{padding:12px}
+  #cardPrev .cm{font-size:11px;color:var(--mut);display:flex;gap:10px;margin-bottom:6px}
+  #cardPrev .ct{font-weight:700;font-size:14px;margin-bottom:6px}
+  #cardPrev .cx{font-size:12px;color:var(--mut)}
+</style>
+</head>
+<body>
+<header>
+  <h1>NORDOSUDO <span>· Blog Manager</span></h1>
+  <div class="warn">Ferramenta interna — não linkada no site. Publique e retire posts do blog direto no repositório (commit via GitHub API). O token fica apenas no seu navegador (localStorage).</div>
+</header>
+<main>
+  <!-- COLUNA ESQUERDA: conexão + posts -->
+  <div>
+    <section id="secCfg">
+      <h2>Conexão</h2>
+      <label>Repositório</label>
+      <input type="text" id="repo" value="rafaguipe/nordosudo_web">
+      <label>Token GitHub (scope: repo / contents:write)</label>
+      <input type="password" id="token" placeholder="github_pat_... ou ghp_..." autocomplete="off">
+      <div class="row" style="margin-top:12px">
+        <button class="btn-gold" id="btnConnect">Salvar token</button>
+        <button class="btn-ghost btn-sm" id="btnRefresh" title="Atualizar lista de posts">↻ Atualizar</button>
+      </div>
+      <div class="hint">Crie em github.com/settings/tokens → <b>Fine-grained</b> (repo rafaguipe/nordosudo_web, permissão <b>Contents: Read and write</b>) ou <b>Classic</b> com scope <b>repo</b>.</div>
+    </section>
+    <section id="secPosts" style="margin-top:24px">
+      <h2>Posts publicados</h2>
+      <div id="posts"><div class="hint">Clique em "Salvar token" (ou "↻ Atualizar") para carregar.</div></div>
+    </section>
+  </div>
+  <!-- COLUNA DIREITA: novo post -->
+  <div>
+    <section id="secNew">
+      <h2>Publicar novo post</h2>
+      <div class="two">
+        <div>
+          <label>Título</label>
+          <input type="text" id="fTitle" placeholder="Ex.: O que aprendemos conversando com fabricantes brasileiros">
+        </div>
+        <div>
+          <label>Data de publicação</label>
+          <input type="date" id="fDate">
+        </div>
+      </div>
+      <label>Autor</label>
+      <input type="text" id="fAuthor" placeholder="Rafael Guimarães Pereira">
+      <label>Texto (um parágrafo por linha em branco — ou carregue o .docx abaixo)</label>
+      <textarea id="fBody" placeholder="Cole aqui o texto do post..."></textarea>
+      <div class="row" style="margin-top:8px">
+        <span class="filebtn"><button class="btn-ghost btn-sm">📄 Carregar .docx</button><input type="file" id="fDocx" accept=".docx"></span>
+        <span id="docxName" class="hint"></span>
+      </div>
+      <label>Imagem de capa (opcional — sem imagem usa o placeholder)</label>
+      <div class="row">
+        <span class="filebtn"><button class="btn-ghost btn-sm">🖼 Escolher imagem</button><input type="file" id="fImg" accept="image/*"></span>
+        <span id="imgName" class="hint"></span>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn-gold" id="btnPublish">🚀 Publicar (commit no GitHub)</button>
+        <span class="hint" id="publishHint"></span>
+      </div>
+      <details>
+        <summary>Prévia do card</summary>
+        <div id="cardPrev" style="margin-top:10px"></div>
+      </details>
+    </section>
+    <section id="secLog" style="margin-top:24px">
+      <h2>Log</h2>
+      <div id="log"></div>
+    </section>
+  </div>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const LOG = document.getElementById('log');
+const POSTS = document.getElementById('posts');
+let TOKEN = localStorage.getItem('nsd_blog_token') || '';
+const REPO = 'rafaguipe/nordosudo_web';
+const BRANCH = 'main';
+const SITE = 'https://nordosudo.com';
+
+function log(msg, cls) {
+  const div = document.createElement('div');
+  div.textContent = (cls ? '' : '• ') + msg;
+  if (cls) div.className = cls;
+  LOG.appendChild(div);
+  LOG.scrollTop = LOG.scrollHeight;
+}
+
+/* ---------- GitHub API ---------- */
+async function gh(path, opts = {}) {
+  const headers = { 'Accept': 'application/vnd.github+json' };
+  if (TOKEN) headers['Authorization'] = 'Bearer ' + TOKEN;
+  const r = await fetch('https://api.github.com' + path, { ...opts, headers });
+  if (!r.ok) {
+    let d = '';
+    try { d = (await r.json()).message || ''; } catch (e) {}
+    throw new Error(`GitHub ${r.status}: ${d}`);
+  }
+  return r.status === 204 ? null : r.json();
+}
+async function ghHeadCommit() {
+  const ref = await gh(`/repos/${REPO}/git/ref/heads/${BRANCH}`);
+  return ref.object.sha;
+}
+async function ghTreeBase(commitSha) {
+  const c = await gh(`/repos/${REPO}/git/commits/${commitSha}`);
+  return c.tree.sha;
+}
+async function ghCreateBlob(contentB64) {
+  const b = await gh(`/repos/${REPO}/git/blobs`, { method: 'POST', body: JSON.stringify({ content: contentB64, encoding: 'base64' }) });
+  return b.sha;
+}
+/* Commit atômico: recebe [{path, content(string) | blobB64, delete?}] */
+async function ghAtomicCommit(message, files) {
+  const head = await ghHeadCommit();
+  const baseTree = await ghTreeBase(head);
+  const entries = [];
+  for (const f of files) {
+    if (f.blobB64) entries.push({ path: f.path, mode: '100644', type: 'blob', sha: await ghCreateBlob(f.blobB64) });
+    else if (f.delete) entries.push({ path: f.path, sha: null });
+    else entries.push({ path: f.path, mode: '100644', type: 'blob', content: f.content });
+  }
+  const tree = await gh(`/repos/${REPO}/git/trees`, { method: 'POST', body: JSON.stringify({ base_tree: baseTree, tree: entries }) });
+  const commit = await gh(`/repos/${REPO}/git/commits`, { method: 'POST', body: JSON.stringify({ message, tree: tree.sha, parents: [head] }) });
+  await gh(`/repos/${REPO}/git/refs/heads/${BRANCH}`, { method: 'PATCH', body: JSON.stringify({ sha: commit.sha, force: false }) });
+  log('✔ commit ' + commit.sha.slice(0, 7) + ' — ' + message);
+  return commit.sha;
+}
+async function ghReadText(path) {
+  const f = await gh(`/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
+  const bin = atob(f.content.replace(/-/g, '+').replace(/_/g, '/'));
+  return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0)));
+}
+async function ghListDir(path) {
+  const f = await gh(`/repos/${REPO}/contents/${path}?ref=${BRANCH}`);
+  return Array.isArray(f) ? f : [];
+}
+
+/* ---------- helpers puros ---------- */
+function slugify(t) {
+  return t.toLowerCase().normalize('NFC')
+    .replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '');
+}
+const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+function dataPt(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return `${d} de ${MESES[m - 1]} de ${y}`;
+}
+function escapeHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function excerpt(text, max = 155) {
+  const t = text.replace(/\s+/g, ' ').trim();
+  if (t.length <= max) return t + '…';
+  const cut = t.slice(0, max);
+  return cut.slice(0, cut.lastIndexOf(' ')) + '…';
+}
+function paragraphsToHtml(text) {
+  return text.split(/\n\s*\n/).map(p => p.replace(/\n/g, ' ').trim()).filter(Boolean)
+    .map(p => `<p>${escapeHtml(p)}</p>`).join('\n');
+}
+
+/* ---------- template do artigo (idêntico ao pipeline atual) ---------- */
+function artigoTemplate({ title, slug, desc, dateIso, datePt, author, imgRel, imgAbs, bodyHtml }) {
+  const canon = `${SITE}/blog/${slug}.html`;
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${escapeHtml(title)} | Nordosudo Blog</title>
+  <meta name="description" content="${escapeHtml(desc)}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="${canon}">
+  <meta property="og:title" content="${escapeHtml(title)}">
+  <meta property="og:description" content="${escapeHtml(desc)}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="${canon}">
+  <meta property="og:site_name" content="Nordosudo">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:image" content="${imgAbs}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${escapeHtml(title)}">
+  <meta name="twitter:description" content="${escapeHtml(desc)}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../page-styles.css">
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-67WRFL96L2"><\/script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-67WRFL96L2');
+    gtag('config', 'AW-18326183646');
+  <\/script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "${escapeHtml(title)}",
+    "description": "${escapeHtml(desc)}",
+    "datePublished": "${dateIso}",
+    "author": {
+      "@type": "Person",
+      "name": "${escapeHtml(author)}"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Nordosudo",
+      "url": "${SITE}"
+    }
+  }
+  <\/script>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="../index.html" class="nav-logo">
+        <span class="logo-text">NORDOSUDO</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../boraexportar.html">BoraExportar</a></li>
+        <li><a href="../usmarket.html">BoraUSA</a></li>
+        <li><a href="../quem-somos.html">Quem Somos</a></li>
+        <li><a href="../blog.html" class="active">Blog</a></li>
+        <li><a href="../contato.html" class="nav-cta">Conversar com Especialista</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+<article class="blog-post">
+  <div class="container">
+    <div class="blog-post-header">
+      <a href="../blog.html" class="blog-post-back">← Voltar ao Blog</a>
+      <div class="blog-post-meta">
+        <span class="blog-post-date">${datePt}</span>
+        <span class="blog-post-author">${escapeHtml(author)}</span>
+      </div>
+      <h1 class="blog-post-title">${escapeHtml(title)}</h1>
+    </div>
+    <div class="blog-post-content">
+<div class="blog-post-featured-image">
+  <img src="${imgRel}" alt="${escapeHtml(title)}" loading="lazy">
+</div>
+${bodyHtml}
+    </div>
+  </div>
+</article>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="footer-logo">NORDOSUDO</span>
+          <p class="footer-tagline">Plataforma boutique de internacionalização para alimentos e bebidas.</p>
+        </div>
+        <div class="footer-links">
+          <a href="../index.html">Home</a>
+          <a href="../boraexportar.html">BoraExportar</a>
+          <a href="../usmarket.html">BoraUSA</a>
+          <a href="../quem-somos.html">Quem Somos</a>
+          <a href="../blog.html">Blog</a>
+          <a href="../contato.html">Contato</a>
+        </div>
+        <div class="footer-bottom">
+          <span>&copy; 2026 Nordosudo. Todos os direitos reservados.</span>
+          <a href="../politica-de-privacidade.html">Política de Privacidade</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../script.js"><\/script>
+</body>
+</html>
+`;
+}
+
+/* ---------- card + sitemap ---------- */
+function cardHtml({ slug, title, author, datePt, imgRel, excerpt }) {
+  return `    <a href="blog/${slug}.html" class="blog-card">
+      <div class="blog-card-image"><img src="${imgRel}" alt="${escapeHtml(title)}" loading="lazy"></div>
+      <div class="blog-card-body">
+        <div class="blog-card-meta">
+          <span class="blog-card-date">${datePt}</span>
+          <span class="blog-card-author">${escapeHtml(author)}</span>
+        </div>
+        <h3 class="blog-card-title">${escapeHtml(title)}</h3>
+        <p class="blog-card-excerpt">${escapeHtml(excerpt)}</p>
+        <span class="blog-card-readmore">Ler artigo →</span>
+      </div>
+    </a>`;
+}
+function insertCard(blogHtml, card) {
+  const marker = '<div class="blog-grid">';
+  if (!blogHtml.includes(marker)) throw new Error('blog.html: marcador .blog-grid não encontrado');
+  return blogHtml.replace(marker, marker + '\n' + card);
+}
+function removeCard(blogHtml, slug) {
+  const re = new RegExp(`\\s*<a href="blog/${slug}.html" class="blog-card">[\\s\\S]*?<\\/a>`, '');
+  if (!re.test(blogHtml)) throw new Error('Card não encontrado no blog.html');
+  return blogHtml.replace(re, '');
+}
+function sitemapAdd(xml, slug, dateIso) {
+  const url = `  <url>
+    <loc>${SITE}/blog/${slug}.html</loc>
+    <lastmod>${dateIso}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>`;
+  const OPEN = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+  const idx = xml.indexOf(OPEN);
+  if (idx < 0) throw new Error('sitemap.xml: abertura <urlset> não encontrada');
+  const at = idx + OPEN.length;
+  return xml.slice(0, at) + '\n' + url + xml.slice(at);
+}
+function sitemapRemove(xml, slug) {
+  const re = new RegExp(`\\s*<url>[\\s\\S]*?<loc>[^<]*/blog/${slug}.html<\\/loc>[\\s\\S]*?<\\/url>`, '');
+  if (!re.test(xml)) throw new Error('URL não encontrada no sitemap.xml');
+  return xml.replace(re, '');
+}
+
+/* ---------- parse de cards existentes (blog.html) ---------- */
+function parseCards(blogHtml) {
+  const out = [];
+  const re = /<a href="blog\/([^"]+)\.html" class="blog-card">[\s\S]*?blog-card-date">([^<]+)<[\s\S]*?blog-card-author">([^<]+)<[\s\S]*?blog-card-title">([^<]+)</g;
+  let m;
+  while ((m = re.exec(blogHtml))) out.push({ slug: m[1], date: m[2], author: m[3], title: m[4] });
+  return out;
+}
+
+/* ---------- .docx -> texto (JSZip + word/document.xml) ---------- */
+async function docxToText(file) {
+  if (typeof JSZip === 'undefined') throw new Error('JSZip não carregou (sem internet?). Carregue o CDN ou cole o texto manualmente.');
+  const zip = await JSZip.loadAsync(await file.arrayBuffer());
+  const xml = await zip.file('word/document.xml').async('string');
+  const doc = new DOMParser().parseFromString(xml, 'application/xml');
+  const NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+  const ps = doc.getElementsByTagNameNS(NS, 'p');
+  const out = [];
+  for (const p of ps) {
+    const ts = p.getElementsByTagNameNS(NS, 't');
+    let t = '';
+    for (const tn of ts) t += tn.textContent;
+    out.push(t);
+  }
+  /* pula linha em branco e "Título:"/"Data:"/"Autor:" iniciais do template LinkedIn */
+  let start = 0;
+  while (start < out.length && (out[start].trim() === '' || /^(Título|Data|Autor|Link|Publicado|Tema)\s*:/i.test(out[start].trim()))) start++;
+  return out.slice(start).join('\n\n');
+}
+
+/* ---------- UI: lista de posts ---------- */
+async function loadPosts() {
+  POSTS.innerHTML = '<div class="hint">Carregando…</div>';
+  try {
+    const blogHtml = await ghReadText('blog.html');
+    const cards = parseCards(blogHtml);
+    let drafts = [];
+    try { drafts = (await ghListDir('blog/drafts')).map(d => d.name.replace(/\.html$/, '')); } catch (e) { drafts = []; }
+    POSTS.innerHTML = '';
+    for (const c of cards) POSTS.appendChild(postEl(c, false));
+    if (drafts.length) {
+      const sep = document.createElement('div');
+      sep.style.cssText = 'font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-top:6px';
+      sep.textContent = '— Rascunhos (fora do ar) —';
+      POSTS.appendChild(sep);
+      for (const d of drafts) POSTS.appendChild(postEl({ slug: d, title: d, date: '', author: '' }, true));
+    }
+    log(`✔ ${cards.length} post(s) publicado(s)${drafts.length ? `, ${drafts.length} rascunho(s)` : ''}`);
+  } catch (e) {
+    POSTS.innerHTML = `<div class="hint err">Falha: ${e.message}</div>`;
+    log('ERRO ao listar posts: ' + e.message, 'err');
+  }
+}
+function postEl(c, isDraft) {
+  const el = document.createElement('div');
+  el.className = 'post' + (isDraft ? ' draft' : '');
+  el.innerHTML = `
+    <div class="pt">${escapeHtml(c.title || c.slug)}</div>
+    <div class="pm"><span>${isDraft ? 'RASCUNHO' : ''}</span><span>${escapeHtml(c.date)}</span><span>${escapeHtml(c.author)}</span></div>
+    <div class="pa">
+      <button class="btn-sm btn-ghost" data-act="restore" style="${isDraft ? '' : 'display:none'}">↩ Publicar de novo</button>
+      <button class="btn-sm btn-danger" data-act="down" style="${isDraft ? 'display:none' : ''}">Tirar do ar</button>
+      <button class="btn-sm btn-ghost" data-act="delete">🗑 Excluir</button>
+    </div>`;
+  el.querySelector('[data-act=down]').onclick = () => takeDown(c.slug, c.title);
+  el.querySelector('[data-act=restore]').onclick = () => restorePost(c.slug);
+  el.querySelector('[data-act=delete]').onclick = () => deletePost(c.slug, isDraft);
+  return el;
+}
+
+/* ---------- ações de escrita ---------- */
+async function publish() {
+  const title = $('fTitle').value.trim();
+  const author = $('fAuthor').value.trim();
+  const dateIso = $('fDate').value;
+  const body = $('fBody').value.trim();
+  if (!title) return alert('Informe o título.');
+  if (!author) return alert('Informe o autor.');
+  if (!dateIso) return alert('Informe a data.');
+  if (!body) return alert('Cole o texto do post.');
+  if (!TOKEN) return alert('Salve o token GitHub primeiro (seção Conexão).');
+  const slug = slugify(title);
+  const datePt = dataPt(dateIso);
+  const desc = excerpt(body.replace(/\n+/g, ' '));
+  const imgFile = $('fImg').files[0];
+  const imgExt = imgFile ? (imgFile.name.split('.').pop().toLowerCase() || 'jpg') : 'svg';
+  const imgRel = imgFile
+    ? `assets/blog/${slug}/${slug}-img-1.${imgExt}`
+    : 'assets/blog/placeholder.svg';
+  const imgAbs = `${SITE}/${imgRel}`;
+  const bodyHtml = paragraphsToHtml(body);
+  const artigo = artigoTemplate({ title, slug, desc, dateIso, datePt, author, imgRel: '../' + imgRel, imgAbs, bodyHtml });
+  const card = cardHtml({ slug, title, author, datePt, imgRel, excerpt: excerpt(body) });
+  $('publishHint').textContent = 'Publicando… (commit atômico)';
+  try {
+    log(`Publicando "${title}" → blog/${slug}.html`);
+    const blogHtml = await ghReadText('blog.html');
+    const sitemap = await ghReadText('sitemap.xml');
+    const files = [
+      { path: `blog/${slug}.html`, content: artigo },
+      { path: 'blog.html', content: insertCard(blogHtml, card) },
+      { path: 'sitemap.xml', content: sitemapAdd(sitemap, slug, dateIso) },
+    ];
+    if (imgFile) {
+      const b64 = await fileToBase64(imgFile);
+      files.push({ path: imgRel, blobB64: b64 });
+    }
+    await ghAtomicCommit(`Blog: novo artigo '${title}'`, files);
+    log('✔ Artigo publicado. GitHub Pages atualiza em ~1 min.');
+    $('publishHint').textContent = '✔ Publicado!';
+    $('fTitle').value = ''; $('fAuthor').value = ''; $('fBody').value = '';
+    $('fDate').value = ''; $('fImg').value = ''; $('imgName').textContent = '';
+    loadPosts();
+  } catch (e) {
+    log('ERRO: ' + e.message, 'err');
+    $('publishHint').textContent = '✖ Falhou — veja o log.';
+  }
+}
+async function takeDown(slug, title) {
+  if (!TOKEN) return alert('Salve o token GitHub primeiro.');
+  if (!confirm(`Tirar do ar "${title}"?\n\nO card some do blog e do sitemap; o arquivo é movido para blog/drafts/ (pode restaurar depois).`)) return;
+  try {
+    log(`Tirando do ar "${title}"…`);
+    const blogHtml = await ghReadText('blog.html');
+    const sitemap = await ghReadText('sitemap.xml');
+    const artigo = await ghReadText(`blog/${slug}.html`);
+    await ghAtomicCommit(`Blog: tirar do ar '${title}'`, [
+      { path: 'blog.html', content: removeCard(blogHtml, slug) },
+      { path: 'sitemap.xml', content: sitemapRemove(sitemap, slug) },
+      { path: `blog/drafts/${slug}.html`, content: artigo },
+      { path: `blog/${slug}.html`, delete: true },
+    ]);
+    log('✔ Fora do ar. Rascunho em blog/drafts/.');
+    loadPosts();
+  } catch (e) { log('ERRO: ' + e.message, 'err'); }
+}
+async function restorePost(slug) {
+  if (!TOKEN) return alert('Salve o token GitHub primeiro.');
+  try {
+    log(`Restaurando "${slug}"…`);
+    const artigo = await ghReadText(`blog/drafts/${slug}.html`);
+    /* extrai metadados do próprio artigo */
+    const title = (artigo.match(/<h1 class="blog-post-title">([^<]+)<\/h1>/) || [])[1] || slug;
+    const author = (artigo.match(/blog-post-author">([^<]+)<\/span>/) || [])[1] || 'Nordosudo';
+    const datePt = (artigo.match(/blog-post-date">([^<]+)<\/span>/) || [])[1] || '';
+    const dateIso = (artigo.match(/"datePublished": "([^"]+)"/) || [])[1] || '2026-01-01';
+    const imgRel = (artigo.match(/blog-post-featured-image">[\s\S]*?src="([^"]+)"/) || [])[1] || 'assets/blog/placeholder.svg';
+    const bodyText = (artigo.match(/<div class="blog-post-content">([\s\S]*?)<\/div>\s*<\/div>\s*<\/article>/) || [])[1] || '';
+    const clean = bodyText.replace(/<div class="blog-post-featured-image">[\s\S]*?<\/div>\s*/, '').replace(/<p>/g, '\n\n').replace(/<\/p>/g, '').trim();
+    const blogHtml = await ghReadText('blog.html');
+    const sitemap = await ghReadText('sitemap.xml');
+    const card = cardHtml({ slug, title, author, datePt, imgRel: imgRel.replace(/^\.\.\//, ''), excerpt: excerpt(clean) });
+    await ghAtomicCommit(`Blog: republicar '${title}'`, [
+      { path: `blog/${slug}.html`, content: artigo },
+      { path: 'blog.html', content: insertCard(blogHtml, card) },
+      { path: 'sitemap.xml', content: sitemapAdd(sitemap, slug, dateIso) },
+      { path: `blog/drafts/${slug}.html`, delete: true },
+    ]);
+    log('✔ Republicado.');
+    loadPosts();
+  } catch (e) { log('ERRO: ' + e.message, 'err'); }
+}
+async function deletePost(slug, isDraft) {
+  if (!TOKEN) return alert('Salve o token GitHub primeiro.');
+  const where = isDraft ? `blog/drafts/${slug}.html` : `blog/${slug}.html`;
+  if (!confirm(`Excluir DEFINITIVAMENTE ${where}?\n\nAção irreversível.`)) return;
+  try {
+    await ghAtomicCommit(`Blog: excluir '${slug}'`, [{ path: where, delete: true }]);
+    log(`✔ Excluído: ${where}`);
+    loadPosts();
+  } catch (e) { log('ERRO: ' + e.message, 'err'); }
+}
+
+/* ---------- utils UI ---------- */
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(String(r.result).split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+function renderCardPreview() {
+  const title = $('fTitle').value.trim();
+  const dateIso = $('fDate').value;
+  const author = $('fAuthor').value.trim();
+  const body = $('fBody').value.trim();
+  const imgFile = $('fImg').files[0];
+  const cv = $('cardPrev');
+  if (!title && !body) { cv.innerHTML = ''; return; }
+  const slug = slugify(title || 'previa');
+  const datePt = dateIso ? dataPt(dateIso) : '';
+  const imgHtml = imgFile
+    ? `<img src="${URL.createObjectURL(imgFile)}">`
+    : '<div class="ci">placeholder.svg</div>';
+  cv.innerHTML = `<div class="ci">${imgHtml}</div><div class="cb">
+    <div class="cm"><span>${datePt}</span><span>${escapeHtml(author || 'Autor')}</span></div>
+    <div class="ct">${escapeHtml(title || 'Título do post')}</div>
+    <div class="cx">${escapeHtml(excerpt(body || 'Prévia do texto…'))}</div>
+  </div>`;
+}
+
+/* ---------- events ---------- */
+$('btnConnect').onclick = () => {
+  TOKEN = $('token').value.trim();
+  localStorage.setItem('nsd_blog_token', TOKEN);
+  log(TOKEN ? '✔ Token salvo no navegador.' : 'Token removido (modo leitura pública).');
+  loadPosts();
+};
+$('btnRefresh').onclick = loadPosts;
+$('btnPublish').onclick = publish;
+$('fDocx').onchange = async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  try {
+    $('docxName').textContent = 'Lendo ' + f.name + '…';
+    const text = await docxToText(f);
+    $('fBody').value = text;
+    $('docxName').textContent = '✔ ' + f.name + ' — texto carregado, revise abaixo.';
+    renderCardPreview();
+  } catch (err) {
+    $('docxName').textContent = '✖ ' + err.message;
+  }
+};
+$('fImg').onchange = () => {
+  const f = $('fImg').files[0];
+  $('imgName').textContent = f ? '✔ ' + f.name + ' (' + Math.round(f.size / 1024) + ' KB)' : '';
+  renderCardPreview();
+};
+for (const id of ['fTitle', 'fDate', 'fAuthor', 'fBody']) $(id).oninput = renderCardPreview;
+
+/* init */
+$('fDate').value = new Date().toISOString().slice(0, 10);
+if (TOKEN) $('token').value = TOKEN;
+log('Blog Manager pronto. Token ' + (TOKEN ? 'carregado do navegador.' : 'ausente — modo leitura pública.'));
+if (!TOKEN) loadPosts(); else loadPosts();
+</script>
+</body>
+</html>
