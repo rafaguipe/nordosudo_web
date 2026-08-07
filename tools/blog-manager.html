@@ -553,10 +553,31 @@ async function restorePost(slug) {
 async function deletePost(slug, isDraft) {
   if (!TOKEN) return alert('Salve o token GitHub primeiro.');
   const where = isDraft ? `blog/drafts/${slug}.html` : `blog/${slug}.html`;
-  if (!confirm(`Excluir DEFINITIVAMENTE ${where}?\n\nAção irreversível.`)) return;
+  const extra = isDraft ? '' : '\n\nTambém remove o card do blog.html e a URL do sitemap.xml.';
+  if (!confirm(`Excluir DEFINITIVAMENTE ${where}?${extra}\n\nAção irreversível.`)) return;
   try {
-    await ghAtomicCommit(`Blog: excluir '${slug}'`, [{ path: where, delete: true }]);
-    log(`✔ Excluído: ${where}`);
+    const files = [];
+    if (!isDraft) {
+      const blogHtml = await ghReadText('blog.html');
+      const sitemap = await ghReadText('sitemap.xml');
+      try { files.push({ path: 'blog.html', content: removeCard(blogHtml, slug) }); }
+      catch (e) { log('Obs: card já ausente do blog.html.'); }
+      try { files.push({ path: 'sitemap.xml', content: sitemapRemove(sitemap, slug) }); }
+      catch (e) { log('Obs: URL já ausente do sitemap.xml.'); }
+      try {
+        for (const a of await ghListDir(`assets/blog/${slug}`)) {
+          files.push({ path: `assets/blog/${slug}/${a.name}`, delete: true });
+        }
+      } catch (e) { /* sem pasta própria de assets — ok */ }
+    }
+    /* só marca delete se o arquivo ainda existir (pode já ter sido removido antes) */
+    try {
+      await ghReadText(where);
+      files.push({ path: where, delete: true });
+    } catch (e) { log('Obs: ' + where + ' já não existe no repo.'); }
+    if (!files.length) { log('Nada a excluir — post já fora do repo.'); return; }
+    await ghAtomicCommit(`Blog: excluir '${slug}'`, files);
+    log(`✔ Excluído: ${slug}${isDraft ? ' (rascunho)' : ' + card do blog.html + sitemap'}`);
     loadPosts();
   } catch (e) { log('ERRO: ' + e.message, 'err'); }
 }
