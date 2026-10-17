@@ -119,6 +119,7 @@ git push origin main
 
 - **GA4:** `G-67WRFL96L2` (no `script.js` e em todas as páginas via `gtag.js`)
 - **Google Ads:** `AW-18326183646`
+- **Google Ads (LP BoraExportar):** `AW-17526792382`, a conta da campanha de pesquisa. A conversão de clique no WhatsApp é enviada pela variável `ADS_CONVERSAO_WHATSAPP` em `lp/boraexportar/index.html`
 
 ## 📝 Notas
 

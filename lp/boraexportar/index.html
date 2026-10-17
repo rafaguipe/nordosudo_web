@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-<!-- Google Analytics 4 + Google Ads (mesmas tags do site) -->
+<!-- Google Analytics 4 + Google Ads (tags do site + conta da campanha de pesquisa) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-67WRFL96L2"></script>
 <script>
 window.dataLayer = window.dataLayer || [];
@@ -30,6 +30,9 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-67WRFL96L2');
 gtag('config', 'AW-18326183646');
+gtag('config', 'AW-17526792382'); // conta do Google Ads da campanha BoraExportar
+// send_to da ação de conversão "Contato" (WhatsApp) na conta AW-17526792382; vazio = não envia
+var ADS_CONVERSAO_WHATSAPP = '';
 // Todos os CTAs da LP abrem o WhatsApp: cada clique vira o evento whatsapp_click
 document.addEventListener('click', function (e) {
   var a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
@@ -39,6 +42,7 @@ document.addEventListener('click', function (e) {
     'event_label': a.textContent.trim().replace(/\s+/g, ' '),
     'page': 'lp_boraexportar'
   });
+  if (ADS_CONVERSAO_WHATSAPP) gtag('event', 'conversion', {'send_to': ADS_CONVERSAO_WHATSAPP});
 });
 </script>
 <style>
