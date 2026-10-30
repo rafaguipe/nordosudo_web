@@ -1,0 +1,1 @@
+EN-US page added at en-us/index.html. Shared files are in assets/. The cover and lyrics PDF for My First Halloween in Canada are included. The MP3 file my-first-halloween-in-canada.mp3 was not provided and must be added to assets/ to enable playback. Publish the whole folder under /lp/jingles/ and keep the three language folders as siblings.
