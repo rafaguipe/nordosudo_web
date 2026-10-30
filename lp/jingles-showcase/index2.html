@@ -28,7 +28,7 @@
 <a class="floating" data-wa="geral" href="https://wa.me/?text=%C2%A1Hola%21%20Quiero%20consultar%20por%20una%20canci%C3%B3n%20personalizada.">✆ Pedí tu canción</a>
 <script>
 // CONFIGURACIÓN: ingresá el número con código de país y área, solo dígitos. Ejemplo ficticio: '5511999999999'.
-const WHATSAPP_NUMBER = '';
+const WHATSAPP_NUMBER = '+5511943971961';
 const messages={geral:'¡Hola! Vi sus trabajos de jingles y canciones personalizadas y me gustaría consultar por una canción.',empresa:'¡Hola! Escuché Nordosudo — Conectando Horizontes y me gustaría crear un jingle para mi empresa.',evento:'¡Hola! Escuché Ansenuza Emprende y me gustaría crear una canción para mi evento.',pet:'¡Hola! Escuché Caio y Açaí y me gustaría crear una canción personalizada para mi mascota.'};
 document.querySelectorAll('[data-wa]').forEach(el=>{const key=el.dataset.wa;el.href='https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(messages[key]);el.target='_blank';el.rel='noopener noreferrer';});
 document.getElementById('year').textContent=new Date().getFullYear();
