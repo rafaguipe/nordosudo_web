@@ -33,7 +33,11 @@ gtag('config', 'AW-18326183646');
 gtag('config', 'AW-17526792382'); // conta do Google Ads da campanha BoraExportar
 // send_to da ação de conversão "Contato" (WhatsApp) na conta AW-17526792382; vazio = não envia
 var ADS_CONVERSAO_WHATSAPP = 'AW-17526792382/Xw2MCJaMyJ8dEL7BtqVB';
-// Todos os CTAs da LP abrem o WhatsApp: cada clique vira o evento whatsapp_click
+// send_to da ação de conversão "Formulário" (diagnóstico) na mesma conta; vazio = não envia
+var ADS_CONVERSAO_FORMULARIO = 'AW-17526792382/nmnACO3SnK8dEL7BtqVB';
+// ID do formulário no Formspree (o trecho depois de /f/); vazio = as respostas viram mensagem de WhatsApp
+var FORMSPREE_ID = 'mgaalpry';
+// Cada clique num link de WhatsApp vira o evento whatsapp_click
 document.addEventListener('click', function (e) {
   var a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
   if (!a) return;
@@ -120,6 +124,71 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 .prog::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#C9A74D;transform-origin:0 50%;scale:0 1;animation:draw linear both;animation-timeline:scroll(root)}
 }
 }
+/* Diagnóstico: formulário de uma pergunta por vez */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.cta-diag{background:linear-gradient(135deg,#E9CF86 0%,#C9A74D 55%,#B08A2E 100%);color:#121E34;box-shadow:0 14px 32px rgba(201,167,77,.28),inset 0 1px 0 rgba(255,255,255,.45)}
+.cta-diag:hover{color:#121E34}
+.fab.fab-off{visibility:hidden;pointer-events:none}
+.diag{position:relative;box-sizing:border-box;width:100%;scroll-margin-top:88px;background:#F5F0E4;color:#121E34;border-radius:24px;padding:clamp(20px,2.4vw,30px);border:1px solid rgba(201,167,77,.45);box-shadow:0 30px 70px rgba(0,0,0,.45)}
+.diag [hidden]{display:none!important}
+.diag-topo{display:flex;align-items:center;gap:14px}
+.diag-selo{flex:none;width:46px;height:46px;border-radius:12px;background:#121E34;display:flex;align-items:center;justify-content:center}
+.diag-eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7A5F18}
+.diag-titulo{font-size:18px;font-weight:800;line-height:1.3}
+.diag-titulo:focus{outline:none}
+.diag-sub{margin:12px 0 0;font-size:14px;line-height:1.55;color:#4F5B73}
+.diag-prog{margin-top:18px;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600;line-height:1;color:#4F5B73}
+.diag-barra{flex:1 1 auto;height:6px;border-radius:999px;background:#E0D6BE;overflow:hidden}
+.diag-barra>span{display:block;height:100%;width:16.66%;border-radius:inherit;background:linear-gradient(90deg,#C9A74D,#9E7D24);transition:width .35s ease}
+.diag fieldset{border:0;margin:0;padding:0;min-width:0}
+.diag legend{float:left;width:100%;margin-bottom:14px;padding:0}
+.diag legend+.diag-ops,.diag legend+.diag-campo{clear:both;margin-top:0}
+.diag .diag-passo{margin:20px 0 0}
+.diag legend,.diag-pergunta{display:block;font-size:clamp(19px,1.6vw,22px);font-weight:800;line-height:1.3;letter-spacing:-.01em;color:#121E34}
+.diag-ajuda{margin:6px 0 0;font-size:14px;line-height:1.5;color:#4F5B73}
+.diag-ops{margin-top:14px;display:grid;gap:10px}
+.diag-op{position:relative;display:flex;align-items:center;gap:12px;min-height:54px;box-sizing:border-box;padding:12px 16px;border-radius:14px;border:1.5px solid #D9CDAF;background:#FFFDF8;font-size:16px;font-weight:600;line-height:1.35;color:#121E34;cursor:pointer;transition:border-color .15s ease,background-color .15s ease,color .15s ease}
+.diag-op:hover{border-color:#C9A74D}
+.diag-op,.diag-btn,.diag-voltar,.diag a{-webkit-tap-highlight-color:transparent}
+.diag-op input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.diag-op .marca{flex:none;width:22px;height:22px;box-sizing:border-box;border-radius:50%;border:1.5px solid #B9AB88;display:flex;align-items:center;justify-content:center;color:#121E34;transition:background-color .15s ease,border-color .15s ease}
+.diag-op .marca svg{opacity:0}
+.diag-op.is-sel{background:#121E34;border-color:#121E34;color:#F5F0E4}
+.diag-op.is-sel .marca{background:#C9A74D;border-color:#C9A74D}
+.diag-op.is-sel .marca svg{opacity:1}
+.diag-op input:focus-visible~.marca{box-shadow:0 0 0 3px #C9A74D}
+.diag-op:has(input:focus-visible){outline:3px solid #C9A74D;outline-offset:2px}
+.diag-campo{margin-top:14px}
+.diag-campo label{display:block;margin-bottom:6px;font-size:14px;font-weight:700;line-height:1.4;color:#3D4760}
+.diag-campo input{box-sizing:border-box;width:100%;min-height:52px;padding:12px 14px;border-radius:12px;border:1.5px solid #D9CDAF;background:#FFFFFF;font:inherit;font-size:16px;line-height:1.4;color:#121E34;transition:border-color .15s ease,box-shadow .15s ease}
+.diag-campo input::placeholder{color:#8A93A6}
+.diag-campo input:focus{outline:none;border-color:#121E34;box-shadow:0 0 0 3px rgba(201,167,77,.45)}
+.diag-campo input[aria-invalid="true"]{border-color:#A12B2B}
+.diag-opcional{font-weight:500;color:#5A6479}
+.diag-erro{margin:6px 0 0;font-size:14px;font-weight:600;line-height:1.4;color:#A12B2B}
+.diag-erro:empty{display:none}
+.diag-acoes{margin-top:20px;display:flex;flex-wrap:wrap-reverse;align-items:center;justify-content:space-between;gap:8px 12px}
+.diag-btn{margin-left:auto;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:12px 26px;border:0;border-radius:999px;background:#121E34;color:#F5F0E4;font:inherit;font-size:16px;font-weight:800;line-height:1.2;cursor:pointer;transition:background-color .15s ease}
+.diag-btn:hover{background:#22355A}
+.diag-btn[disabled]{opacity:.65;cursor:progress}
+.diag-voltar{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 4px;border:0;background:none;font:inherit;font-size:15px;font-weight:600;color:#4F5B73;cursor:pointer}
+.diag-voltar:hover{color:#121E34}
+.diag-btn:focus-visible,.diag-voltar:focus-visible,.diag a:focus-visible{outline:3px solid #C9A74D;outline-offset:2px}
+.diag-aviso{margin:12px 0 0;font-size:13px;line-height:1.5;color:#5A6479}
+.diag-aviso a{color:#121E34;font-weight:600}
+.diag-rodape{margin-top:18px;padding-top:14px;border-top:1px solid #E0D6BE;font-size:14px;line-height:1.5;color:#4F5B73}
+.diag-rodape a{color:#0A6837;font-weight:700}
+.diag-aviso a:hover,.diag-rodape a:hover{color:#121E34}
+.diag-fim{margin-top:18px}
+.diag-fim:focus{outline:none}
+.diag-fim-ico{width:52px;height:52px;margin-bottom:16px;border-radius:50%;background:#121E34;color:#C9A74D;display:flex;align-items:center;justify-content:center}
+.diag-zap{margin-top:18px;display:inline-flex;align-items:center;gap:10px;min-height:52px;padding:10px 22px 10px 10px;box-sizing:border-box;border-radius:999px;background:linear-gradient(135deg,#1C9F50 0%,#11873F 30%,#0A6837 100%);color:#FFFFFF;font-size:16px;font-weight:800;line-height:1.3;text-decoration:none;box-shadow:0 10px 24px rgba(17,135,63,.30)}
+.diag-zap:hover{color:#FFFFFF;filter:brightness(1.08)}
+.diag-zap>span{flex:none;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center}
+@media (prefers-reduced-motion:no-preference){
+html{scroll-behavior:smooth}
+.diag-passo:not([hidden]),.diag-fim:not([hidden]){animation:fade-up .35s cubic-bezier(.2,.7,.2,1) both}
+}
 </style>
 </head>
 <body>
@@ -128,7 +197,7 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 <header class="prog" style="position: sticky; top: 0; z-index: 30; background: rgba(14, 24, 43, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(201, 167, 77, 0.16)">
 <div style="max-width: 1240px; margin: 0 auto; box-sizing: border-box; padding: 14px clamp(20px, 4vw, 32px); display: flex; align-items: center; justify-content: space-between; gap: 16px">
 <img src="assets/logo-nordosudo.png" alt="Nordosudo" style="height: 26px; width: auto; display: block">
-<a class="cta shine" href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="flex: none; display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 18px 8px 8px; box-sizing: border-box; border-radius: 999px; background: linear-gradient(135deg, #1C9F50 0%, #11873F 30%, #0A6837 100%); color: #FFFFFF; font-size: 15px; font-weight: 700; line-height: 1.3; text-decoration: none; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0 8px 20px rgba(17, 135, 63, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.22)"><span style="flex: none; width: 28px; height: 28px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span><span class="hide-sm">Falar com um especialista</span><span class="show-sm">WhatsApp</span></a>
+<a class="cta shine cta-diag" href="#diagnostico" style="flex: none; display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 18px 8px 8px; box-sizing: border-box; border-radius: 999px; font-size: 15px; font-weight: 700; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 28px; height: 28px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span><span class="hide-sm">Fazer meu diagnóstico</span><span class="show-sm">Diagnóstico</span></a>
 </div>
 </header>
 
@@ -151,8 +220,8 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 <h1 class="h-in d1" style="margin: 24px 0 0; font-size: clamp(32px, 3.4vw, 50px); line-height: 1.08; letter-spacing: -0.025em; font-weight: 800; color: #F5F0E4">Exporte alimentos e bebidas não alcoólicas <span style="color: #C9A74D">com segurança</span>: estruturamos sua operação do RADAR ao primeiro embarque.</h1>
 <p class="h-in d2" style="margin: 24px 0 0; max-width: 600px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.65; color: #C9D0DC">Com o BoraExportar, a Nordosudo estrutura documentação, conformidade regulatória, precificação e logística para sua empresa vender para fora sem surpresas. Você sabe quanto vai ganhar antes de negociar e tem especialistas ao seu lado nos primeiros embarques.</p>
 <div class="h-in d3" style="margin-top: 36px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px">
-<a class="cta shine" href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 28px 12px 12px; box-sizing: border-box; border-radius: 999px; background: linear-gradient(135deg, #1C9F50 0%, #11873F 30%, #0A6837 100%); color: #FFFFFF; font-size: 17px; font-weight: 800; line-height: 1.3; text-decoration: none; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0 14px 32px rgba(17, 135, 63, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.22)"><span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Falar com um especialista no WhatsApp</a>
-<span style="font-size: 14px; color: #8F9BB0">Conversa sem compromisso · Atendimento em português</span>
+<a class="cta shine cta-diag" href="#diagnostico" style="display: inline-flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 28px 12px 12px; box-sizing: border-box; border-radius: 999px; font-size: 17px; font-weight: 800; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>Começar meu diagnóstico</a>
+<span style="font-size: 14px; color: #8F9BB0">6 perguntas rápidas, sem compromisso · Prefere conversar? <a href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="font-weight: 600">Chame no WhatsApp</a></span>
 </div>
 <ul class="h-in d4" style="list-style: none; margin: 40px 0 0; padding: 24px 0 0; border-top: 1px solid rgba(201, 167, 77, 0.18); display: flex; flex-wrap: wrap; gap: 14px 28px">
 <li style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; line-height: 1.4; color: #E9E3D3"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A74D" style="flex: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg>Especialistas em alimentos e bebidas não alcoólicas</li>
@@ -161,64 +230,84 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 </ul>
 </div>
 <div style="flex: 1 1 440px; min-width: 0; max-width: 540px; margin: 0 auto">
-<div class="h-in d1" style="position: relative; aspect-ratio: 4 / 3.3; border-radius: 28px; overflow: hidden; background: #172641; border: 1px solid rgba(201, 167, 77, 0.30); box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35)">
-<img class="kb" src="assets/hero-conteineres.jpg" fetchpriority="high" alt="Contêineres empilhados no terminal" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; display: block">
-<div aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(18, 30, 52, 0) 45%, rgba(18, 30, 52, 0.55) 100%)"></div>
-</div>
-<div class="h-rise d3" style="position: relative; width: min(100%, 440px); margin: calc(-1 * clamp(110px, 13vw, 190px)) 0 0 calc(-1 * clamp(0px, 2.5vw, 36px)); box-sizing: border-box; background: #F5F0E4; color: #121E34; border-radius: 20px; padding: clamp(18px, 2.2vw, 26px); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45)">
-<div style="display: flex; align-items: center; gap: 14px">
-<span style="flex: none; width: 46px; height: 46px; border-radius: 12px; background: #121E34; display: flex; align-items: center; justify-content: center"><img src="assets/icone-nordosudo.png" alt="" style="width: 26px; height: auto; display: block"></span>
+<form id="diagnostico" class="diag h-rise d1" novalidate aria-labelledby="diag-titulo">
+<div class="diag-topo">
+<span class="diag-selo"><img src="assets/icone-nordosudo.png" alt="" style="width: 26px; height: auto; display: block"></span>
 <div style="min-width: 0">
-<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #7A5F18">BoraExportar</div>
-<div style="font-size: 18px; font-weight: 800; line-height: 1.3">Diagnóstico de prontidão exportadora</div>
+<div class="diag-eyebrow">BoraExportar</div>
+<div class="diag-titulo" id="diag-titulo" tabindex="-1">Diagnóstico de prontidão exportadora</div>
 </div>
 </div>
-<div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; font-weight: 600; color: #3D4760">
-<span style="padding: 5px 12px; border-radius: 999px; background: #E9E1CC">Sua empresa</span>
-<span style="padding: 5px 12px; border-radius: 999px; background: #E9E1CC">Alimentos e bebidas não alcoólicas</span>
+<p class="diag-sub">Responda 6 perguntas rápidas e um especialista da Nordosudo te chama no WhatsApp com o próximo passo.</p>
+<div class="diag-prog" aria-hidden="true"><span class="diag-contador">Pergunta 1 de 6</span><span class="diag-barra"><span></span></span></div>
+<p class="sr-only" id="diag-status" aria-live="polite"></p>
+<fieldset class="diag-passo" data-passo="ja_exporta">
+<legend>Sua empresa já exporta?</legend>
+<div class="diag-ops">
+<label class="diag-op"><input type="radio" name="ja_exporta" value="Ainda não"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Ainda não</span></label>
+<label class="diag-op"><input type="radio" name="ja_exporta" value="Já exportamos algumas vezes"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Já exportamos algumas vezes</span></label>
+<label class="diag-op"><input type="radio" name="ja_exporta" value="Sim, exportamos regularmente"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Sim, exportamos regularmente</span></label>
 </div>
-<ul class="checklist" style="list-style: none; margin: 14px 0 0; padding: 0">
-<li style="display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-top: 1px solid #E0D6BE">
-<span style="flex: none; width: 28px; height: 28px; border-radius: 50%; background: #121E34; color: #C9A74D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span>
-<div style="min-width: 0"><div style="font-size: 15px; font-weight: 700; line-height: 1.4">Regulatória</div><div style="font-size: 13px; line-height: 1.5; color: #4F5B73">RADAR · NCM · FDA · requisitos sanitários</div></div>
-</li>
-<li style="display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-top: 1px solid #E0D6BE">
-<span style="flex: none; width: 28px; height: 28px; border-radius: 50%; background: #121E34; color: #C9A74D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span>
-<div style="min-width: 0"><div style="font-size: 15px; font-weight: 700; line-height: 1.4">Documental</div><div style="font-size: 13px; line-height: 1.5; color: #4F5B73">Proforma Invoice · Commercial Invoice · Packing List</div></div>
-</li>
-<li style="display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-top: 1px solid #E0D6BE">
-<span style="flex: none; width: 28px; height: 28px; border-radius: 50%; background: #121E34; color: #C9A74D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span>
-<div style="min-width: 0"><div style="font-size: 15px; font-weight: 700; line-height: 1.4">Logística</div><div style="font-size: 13px; line-height: 1.5; color: #4F5B73">Agentes de carga · despachantes · seguros</div></div>
-</li>
-<li style="display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-top: 1px solid #E0D6BE">
-<span style="flex: none; width: 28px; height: 28px; border-radius: 50%; background: #121E34; color: #C9A74D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span>
-<div style="min-width: 0"><div style="font-size: 15px; font-weight: 700; line-height: 1.4">Comercial</div><div style="font-size: 13px; line-height: 1.5; color: #4F5B73">Incoterms · preço de exportação</div></div>
-</li>
-<li style="display: flex; align-items: flex-start; gap: 14px; padding: 12px 0 0; border-top: 1px solid #E0D6BE">
-<span style="flex: none; width: 28px; height: 28px; border-radius: 50%; background: #121E34; color: #C9A74D; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span>
-<div style="min-width: 0"><div style="font-size: 15px; font-weight: 700; line-height: 1.4">Financeira</div><div style="font-size: 13px; line-height: 1.5; color: #4F5B73">Landed cost · margem real</div></div>
-</li>
-</ul>
+<p class="diag-erro" role="alert"></p>
+</fieldset>
+<fieldset class="diag-passo" data-passo="segmento" hidden>
+<legend>O que a sua empresa produz?</legend>
+<div class="diag-ops">
+<label class="diag-op"><input type="radio" name="segmento" value="Alimentos"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Alimentos</span></label>
+<label class="diag-op"><input type="radio" name="segmento" value="Bebidas não alcoólicas"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Bebidas não alcoólicas</span></label>
+<label class="diag-op"><input type="radio" name="segmento" value="Alimentos e bebidas não alcoólicas"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Alimentos e bebidas não alcoólicas</span></label>
+<label class="diag-op"><input type="radio" name="segmento" value="Outro segmento"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Outro segmento</span></label>
 </div>
-<div class="h-rise d5" style="position: relative; width: min(100%, 320px); margin: 16px 0 0 auto; box-sizing: border-box; padding: 18px 20px; border-radius: 16px; background: #0E182B; border: 1px solid rgba(201, 167, 77, 0.40); box-shadow: 0 22px 50px rgba(0, 0, 0, 0.5)">
-<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
-<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #C9A74D">Rota até o embarque</span>
-<svg class="bob" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C9A74D" style="flex: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><path d="M12 10.189V14"></path><path d="M12 2v3"></path><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"></path><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-8.188-3.639a2 2 0 0 0-1.624 0L3 14a11.6 11.6 0 0 0 2.81 7.76"></path><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path></svg>
+<p class="diag-erro" role="alert"></p>
+</fieldset>
+<div class="diag-passo" data-passo="produto" hidden>
+<label class="diag-pergunta" for="diag-produto">Qual é o principal produto que vocês querem exportar?</label>
+<p class="diag-ajuda" id="diag-produto-ajuda">Ex.: café torrado, polpa de açaí, biscoitos, molhos.</p>
+<div class="diag-campo"><input id="diag-produto" name="produto" type="text" required autocomplete="off" maxlength="120" data-erro="diag-produto-erro" data-msg="Conte qual é o produto." aria-describedby="diag-produto-ajuda diag-produto-erro"></div>
+<p class="diag-erro" id="diag-produto-erro" role="alert"></p>
 </div>
-<div class="route" style="margin-top: 16px; display: flex; align-items: center">
-<span style="flex: none; width: 12px; height: 12px; border-radius: 50%; background: #C9A74D"></span>
-<span style="flex: 1 1 auto; height: 2px; background: #C9A74D"></span>
-<span style="flex: none; width: 12px; height: 12px; border-radius: 50%; background: #C9A74D"></span>
-<span style="flex: 1 1 auto; height: 0; border-top: 2px dashed rgba(201, 167, 77, 0.65)"></span>
-<span style="flex: none; width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; border: 2px solid #C9A74D"></span>
-<span style="flex: 1 1 auto; height: 0; border-top: 2px dashed rgba(201, 167, 77, 0.65)"></span>
-<span style="flex: none; width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; border: 2px solid #C9A74D"></span>
+<fieldset class="diag-passo" data-passo="mercado" hidden>
+<legend>Para onde querem vender?</legend>
+<div class="diag-ops">
+<label class="diag-op"><input type="radio" name="mercado" value="Estados Unidos"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Estados Unidos</span></label>
+<label class="diag-op"><input type="radio" name="mercado" value="Europa"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Europa</span></label>
+<label class="diag-op"><input type="radio" name="mercado" value="América Latina"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>América Latina</span></label>
+<label class="diag-op"><input type="radio" name="mercado" value="Outro mercado"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Outro mercado</span></label>
+<label class="diag-op"><input type="radio" name="mercado" value="Ainda não sei"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Ainda não sei</span></label>
 </div>
-<div style="margin-top: 8px; display: flex; justify-content: space-between; gap: 6px; font-size: 11px; font-weight: 600; line-height: 1.3; color: #8F9BB0">
-<span>Diagnóstico</span><span>Estruturação</span><span>Coordenação</span><span>Embarque</span>
+<p class="diag-erro" role="alert"></p>
+</fieldset>
+<div class="diag-passo" data-passo="empresa" hidden>
+<label class="diag-pergunta" for="diag-empresa">Qual é o nome da empresa?</label>
+<div class="diag-campo"><input id="diag-empresa" name="empresa" type="text" required autocomplete="organization" maxlength="120" data-erro="diag-empresa-erro" data-msg="Informe o nome da empresa." aria-describedby="diag-empresa-erro"></div>
+<p class="diag-erro" id="diag-empresa-erro" role="alert"></p>
 </div>
-<div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(201, 167, 77, 0.16); font-size: 13px; line-height: 1.5; color: #E9E3D3"><strong style="color: #F5F0E4">4 a 8 semanas</strong> em média para estruturar a operação</div>
+<fieldset class="diag-passo" data-passo="contato" hidden>
+<legend>Com quem o especialista vai falar?</legend>
+<div class="diag-campo"><label for="diag-nome">Seu nome</label><input id="diag-nome" name="nome" type="text" autocomplete="name" required data-msg="Informe seu nome." maxlength="80" data-erro="diag-nome-erro" aria-describedby="diag-nome-erro"><p class="diag-erro" id="diag-nome-erro" role="alert"></p></div>
+<div class="diag-campo"><label for="diag-whatsapp">WhatsApp com DDD</label><input id="diag-whatsapp" name="whatsapp" type="tel" autocomplete="tel-national" required data-msg="Informe seu WhatsApp com DDD." inputmode="tel" maxlength="16" placeholder="(11) 91234-5678" data-erro="diag-whatsapp-erro" aria-describedby="diag-whatsapp-erro"><p class="diag-erro" id="diag-whatsapp-erro" role="alert"></p></div>
+<div class="diag-campo"><label for="diag-email">E-mail <span class="diag-opcional">(opcional)</span></label><input id="diag-email" name="email" type="email" autocomplete="email" maxlength="120" data-erro="diag-email-erro" aria-describedby="diag-email-erro"><p class="diag-erro" id="diag-email-erro" role="alert"></p></div>
+</fieldset>
+<div aria-hidden="true" style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden"><label>Não preencha<input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
+<p class="diag-aviso" hidden>Ao enviar, você concorda com a <a href="https://nordosudo.com/politica-de-privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
+<div class="diag-acoes">
+<button type="button" class="diag-voltar" hidden><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="m15 18-6-6 6-6"></path></svg>Voltar</button>
+<button type="submit" class="diag-btn">Continuar</button>
 </div>
+<div class="diag-fim diag-ok" hidden tabindex="-1">
+<span class="diag-fim-ico"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+<p class="diag-pergunta" style="margin: 0">Recebido, <span data-nome></span>!</p>
+<p class="diag-ajuda" style="font-size: 15px">Um especialista da Nordosudo vai te chamar no WhatsApp <strong data-whats></strong> para conversar sobre a exportação.</p>
+<p class="diag-ajuda" style="font-size: 15px">Quer adiantar a conversa?</p>
+<a class="diag-zap" href="https://wa.me/5511943971961" target="_blank" rel="noopener"><span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Chamar agora no WhatsApp</a>
+</div>
+<div class="diag-fim diag-falha" hidden tabindex="-1">
+<p class="diag-pergunta" style="margin: 0">Não conseguimos enviar agora</p>
+<p class="diag-ajuda" style="font-size: 15px">Suas respostas estão guardadas: mande pelo WhatsApp e um especialista continua a partir delas.</p>
+<a class="diag-zap" href="https://wa.me/5511943971961" target="_blank" rel="noopener"><span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Enviar pelo WhatsApp</a>
+</div>
+<div class="diag-rodape">Prefere conversar agora? <a href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener">Chame no WhatsApp</a></div>
+</form>
 </div>
 </div>
 </section>
@@ -250,7 +339,7 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 <svg class="needle" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C9A74D" style="flex: none; margin-top: 2px; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg>
 <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #E9E3D3"><strong style="color: #F5F0E4">Somos especialistas em alimentos e bebidas não alcoólicas.</strong> É essa especialização que nos dá profundidade nas exigências sanitárias e regulatórias de cada mercado.</p>
 </div>
-<a class="cta shine" href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 12px; min-height: 54px; padding: 10px 24px 10px 10px; box-sizing: border-box; border-radius: 999px; background: linear-gradient(135deg, #1C9F50 0%, #11873F 30%, #0A6837 100%); color: #FFFFFF; font-size: 16px; font-weight: 800; line-height: 1.3; text-decoration: none; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0 10px 26px rgba(17, 135, 63, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22)"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Me identifiquei — quero falar com a Nordosudo</a>
+<a class="cta shine cta-diag" href="#diagnostico" style="display: inline-flex; align-items: center; gap: 12px; min-height: 54px; padding: 10px 24px 10px 10px; box-sizing: border-box; border-radius: 999px; font-size: 16px; font-weight: 800; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>Me identifiquei — quero meu diagnóstico</a>
 </div>
 </div>
 </section>
@@ -292,7 +381,7 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 </div>
 <div class="rv" style="margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(201, 167, 77, 0.16); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px 32px">
 <p style="flex: 1 1 520px; min-width: 0; margin: 0; font-size: clamp(18px, 1.5vw, 21px); line-height: 1.5; font-weight: 600; color: #F5F0E4">A maior parte desses problemas se evita antes do primeiro embarque, com a operação estruturada desde o início.</p>
-<a class="cta shine" href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 12px; min-height: 54px; padding: 10px 24px 10px 10px; box-sizing: border-box; border-radius: 999px; background: linear-gradient(135deg, #1C9F50 0%, #11873F 30%, #0A6837 100%); color: #FFFFFF; font-size: 16px; font-weight: 800; line-height: 1.3; text-decoration: none; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0 10px 26px rgba(17, 135, 63, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22)"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Quero estruturar minha exportação</a>
+<a class="cta shine cta-diag" href="#diagnostico" style="display: inline-flex; align-items: center; gap: 12px; min-height: 54px; padding: 10px 24px 10px 10px; box-sizing: border-box; border-radius: 999px; font-size: 16px; font-weight: 800; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>Quero estruturar minha exportação</a>
 </div>
 </div>
 </section>
@@ -352,7 +441,7 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 </li>
 </ol>
 <div style="margin-top: 40px">
-<a class="cta shine" href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 12px; min-height: 54px; padding: 10px 24px 10px 10px; box-sizing: border-box; border-radius: 999px; background: linear-gradient(135deg, #1C9F50 0%, #11873F 30%, #0A6837 100%); color: #FFFFFF; font-size: 16px; font-weight: 800; line-height: 1.3; text-decoration: none; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0 10px 26px rgba(17, 135, 63, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22)"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Quero começar pelo diagnóstico</a>
+<a class="cta shine cta-diag" href="#diagnostico" style="display: inline-flex; align-items: center; gap: 12px; min-height: 54px; padding: 10px 24px 10px 10px; box-sizing: border-box; border-radius: 999px; font-size: 16px; font-weight: 800; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>Quero começar pelo diagnóstico</a>
 </div>
 </div>
 </section>
@@ -402,7 +491,7 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 <svg class="needle" aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C9A74D" style="display: block; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round"><circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg>
 <p style="margin: 16px 0 0; font-size: 22px; line-height: 1.3; font-weight: 800; color: #F5F0E4">Pronto para começar?</p>
 </div>
-<a class="cta shine" href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; min-height: 50px; padding: 8px 20px 8px 8px; box-sizing: border-box; border-radius: 999px; background: linear-gradient(135deg, #1C9F50 0%, #11873F 30%, #0A6837 100%); color: #FFFFFF; font-size: 15px; font-weight: 800; line-height: 1.3; text-decoration: none; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0 10px 24px rgba(17, 135, 63, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.22)"><span style="flex: none; width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Falar com um especialista</a>
+<a class="cta shine cta-diag" href="#diagnostico" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; min-height: 50px; padding: 8px 20px 8px 8px; box-sizing: border-box; border-radius: 999px; font-size: 15px; font-weight: 800; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 32px; height: 32px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>Começar pelo diagnóstico</a>
 </div>
 </div>
 </div>
@@ -457,7 +546,7 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 </li>
 </ul>
 <div style="margin-top: 20px">
-<a class="cta shine" href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 12px; min-height: 54px; padding: 10px 24px 10px 10px; box-sizing: border-box; border-radius: 999px; background: linear-gradient(135deg, #1C9F50 0%, #11873F 30%, #0A6837 100%); color: #FFFFFF; font-size: 16px; font-weight: 800; line-height: 1.3; text-decoration: none; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0 10px 26px rgba(17, 135, 63, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22)"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Falar com um especialista agora</a>
+<a class="cta shine cta-diag" href="#diagnostico" style="display: inline-flex; align-items: center; gap: 12px; min-height: 54px; padding: 10px 24px 10px 10px; box-sizing: border-box; border-radius: 999px; font-size: 16px; font-weight: 800; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>Fazer meu diagnóstico</a>
 </div>
 </div>
 </div>
@@ -513,7 +602,7 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 12px">
 <details open style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>O BoraExportar é só para quem já tem comprador?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
-<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Não. Ele é ideal para quem já tem demanda internacional confirmada ou interesse de compradores. Se você quer exportar e ainda não tem cliente, avaliamos juntos o melhor caminho — é só <a href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="color: #C9A74D; font-weight: 600">chamar no WhatsApp</a>.</p>
+<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Não. Ele é ideal para quem já tem demanda internacional confirmada ou interesse de compradores. Se você quer exportar e ainda não tem cliente, avaliamos juntos o melhor caminho — é só <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">fazer o diagnóstico</a>.</p>
 </details>
 <details style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>Minha empresa nunca exportou. O BoraExportar serve para mim?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
@@ -529,7 +618,7 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 </details>
 <details style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>Quanto custa o BoraExportar?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
-<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">O investimento varia conforme o escopo: produtos, mercados e complexidade regulatória. <a href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="color: #C9A74D; font-weight: 600">Chame no WhatsApp</a>, conte sobre seu produto e o mercado que quer atender, e preparamos um orçamento personalizado.</p>
+<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">O investimento varia conforme o escopo: produtos, mercados e complexidade regulatória. <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">Faça o diagnóstico</a>, conte sobre seu produto e o mercado que quer atender, e preparamos um orçamento personalizado.</p>
 </details>
 <details style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>Vocês encontram compradores no exterior para mim?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
@@ -537,11 +626,11 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 </details>
 <details style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>Vocês atendem qualquer setor?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
-<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Nossa especialidade são alimentos e bebidas não alcoólicas, e é nesse setor que temos mais profundidade nas exigências sanitárias e regulatórias de cada mercado. Se a sua empresa é de outro segmento, <a href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="color: #C9A74D; font-weight: 600">chame no WhatsApp</a> e avaliamos juntos o seu caso.</p>
+<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Nossa especialidade são alimentos e bebidas não alcoólicas, e é nesse setor que temos mais profundidade nas exigências sanitárias e regulatórias de cada mercado. Se a sua empresa é de outro segmento, <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">faça o diagnóstico</a> e avaliamos juntos o seu caso.</p>
 </details>
 <details style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>Como funciona o primeiro contato?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
-<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC"><a href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="color: #C9A74D; font-weight: 600">Você chama no WhatsApp</a> e conta sobre seu produto e seu momento. Nossa equipe agenda uma conversa para entender o cenário e indicar o próximo passo, sem compromisso.</p>
+<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Você <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">responde o diagnóstico</a>, com 6 perguntas rápidas sobre seu produto e seu momento, ou <a href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="color: #C9A74D; font-weight: 600">chama no WhatsApp</a>. Nossa equipe agenda uma conversa para entender o cenário e indicar o próximo passo, sem compromisso.</p>
 </details>
 </div>
 </div>
@@ -549,7 +638,7 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 
 <section style="background: #0E182B; border-top: 1px solid rgba(201, 167, 77, 0.10)">
 <div style="max-width: 1240px; margin: 0 auto; box-sizing: border-box; padding: clamp(64px, 7vw, 104px) clamp(20px, 4vw, 32px)">
-<div class="rv" style="position: relative; overflow: hidden; box-sizing: border-box; padding: clamp(40px, 6vw, 80px) clamp(22px, 5vw, 64px); border-radius: 28px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.32); text-align: center">
+<div class="rv" data-sem-fab style="position: relative; overflow: hidden; box-sizing: border-box; padding: clamp(40px, 6vw, 80px) clamp(22px, 5vw, 64px); border-radius: 28px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.32); text-align: center">
 <svg class="spin-slow" aria-hidden="true" viewBox="0 0 800 800" fill="none" stroke="#C9A74D" style="position: absolute; left: 50%; top: 50%; width: 820px; height: 820px; margin: -410px 0 0 -410px; opacity: 0.07; stroke-width: 1.2; pointer-events: none">
 <circle cx="400" cy="400" r="380"></circle>
 <ellipse cx="400" cy="400" rx="285" ry="380"></ellipse>
@@ -565,9 +654,10 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 <div style="position: relative">
 <img class="float" src="assets/icone-nordosudo.png" loading="lazy" decoding="async" alt="" style="width: 56px; height: auto; display: block; margin: 0 auto">
 <h2 style="margin: 24px auto 0; max-width: 760px; font-size: clamp(28px, 3vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; color: #F5F0E4">Sua empresa está pronta para exportar? <span style="color: #C9A74D">Vamos descobrir juntos.</span></h2>
-<p style="margin: 18px auto 0; max-width: 640px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.7; color: #C9D0DC">Conte para a gente sobre seu produto e o mercado que você quer atender. Em uma conversa rápida, um especialista da Nordosudo entende seu momento e indica o próximo passo.</p>
-<div style="margin-top: 32px">
-<a class="cta shine" href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 28px 12px 12px; box-sizing: border-box; border-radius: 999px; background: linear-gradient(135deg, #1C9F50 0%, #11873F 30%, #0A6837 100%); color: #FFFFFF; font-size: 17px; font-weight: 800; line-height: 1.3; text-decoration: none; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0 14px 32px rgba(17, 135, 63, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.22)"><span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Chamar a Nordosudo no WhatsApp</a>
+<p style="margin: 18px auto 0; max-width: 640px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.7; color: #C9D0DC">Responda 6 perguntas rápidas sobre seu produto e o mercado que você quer atender. Um especialista da Nordosudo te chama no WhatsApp para entender seu momento e indicar o próximo passo.</p>
+<div style="margin-top: 32px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px">
+<a class="cta shine cta-diag" href="#diagnostico" style="display: inline-flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 28px 12px 12px; box-sizing: border-box; border-radius: 999px; font-size: 17px; font-weight: 800; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>Fazer meu diagnóstico</a>
+<a class="cta shine" href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 28px 12px 12px; box-sizing: border-box; border-radius: 999px; background: linear-gradient(135deg, #1C9F50 0%, #11873F 30%, #0A6837 100%); color: #FFFFFF; font-size: 17px; font-weight: 800; line-height: 1.3; text-decoration: none; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0 14px 32px rgba(17, 135, 63, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.22)"><span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Prefiro o WhatsApp</a>
 </div>
 <div style="margin-top: 16px; font-size: 14px; line-height: 1.5; color: #8F9BB0">Sem compromisso · Atendimento em português · Especialistas em alimentos e bebidas não alcoólicas</div>
 </div>
@@ -592,6 +682,216 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 </footer>
 
 <a class="cta shine fab" href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" aria-label="Fale com um especialista no WhatsApp" style="position: fixed; right: 20px; bottom: 20px; z-index: 40; display: inline-flex; align-items: center; gap: 10px; min-height: 58px; padding: 10px 22px 10px 10px; box-sizing: border-box; border-radius: 999px; background: linear-gradient(135deg, #1C9F50 0%, #11873F 30%, #0A6837 100%); color: #FFFFFF; font-size: 15px; font-weight: 800; line-height: 1.3; text-decoration: none; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.22)"><span style="flex: none; width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Fale com um especialista</a>
+
+<script>
+// Diagnóstico: uma pergunta por vez. As respostas vão para o Formspree; sem ID ou com erro, viram mensagem de WhatsApp
+(function () {
+  var form = document.getElementById('diagnostico');
+  if (!form) return;
+  var WHATSAPP = '5511943971961';
+  var passos = [].slice.call(form.querySelectorAll('.diag-passo'));
+  var total = passos.length;
+  var atual = 0, iniciou = false, porPonteiro = false, enviando = false;
+  var btn = form.querySelector('.diag-btn');
+  var voltar = form.querySelector('.diag-voltar');
+  var contador = form.querySelector('.diag-contador');
+  var barra = form.querySelector('.diag-barra > span');
+  var status = document.getElementById('diag-status');
+  var aviso = form.querySelector('.diag-aviso');
+  var params = new URLSearchParams(location.search);
+
+  function evento(nome, extra) {
+    if (window.gtag) gtag('event', nome, Object.assign({'page': 'lp_boraexportar'}, extra || {}));
+  }
+  function valor(nome) {
+    var c = form.elements[nome];
+    return c ? String(c.value || '').trim() : '';
+  }
+  // Só os dígitos do WhatsApp, sem o 55 do Brasil
+  function telefone(v) {
+    var d = v.replace(/\D/g, '');
+    if (d.length > 11 && d.indexOf('55') === 0) d = d.slice(2);
+    return d;
+  }
+
+  function mostrar(i, focar) {
+    passos[atual].hidden = true;
+    atual = i;
+    var p = passos[atual], n = atual + 1, final = n === total;
+    p.hidden = false;
+    contador.textContent = 'Pergunta ' + n + ' de ' + total;
+    status.textContent = 'Pergunta ' + n + ' de ' + total;
+    barra.style.width = (n / total * 100) + '%';
+    voltar.hidden = atual === 0;
+    aviso.hidden = !final;
+    btn.textContent = final ? 'Enviar diagnóstico' : 'Continuar';
+    evento('diagnostico_etapa', {'etapa': n, 'pergunta': p.getAttribute('data-passo')});
+    if (form.getBoundingClientRect().top < 0) form.scrollIntoView({block: 'start'});
+    if (focar) {
+      var campo = p.querySelector('input:not([type="radio"])') || p.querySelector('input:checked') || p.querySelector('input');
+      campo.focus();
+    }
+  }
+
+  function erro(campo, msg) {
+    var el = document.getElementById(campo.getAttribute('data-erro'));
+    if (el) el.textContent = msg;
+    if (msg) campo.setAttribute('aria-invalid', 'true'); else campo.removeAttribute('aria-invalid');
+    return !msg;
+  }
+
+  function valida(p) {
+    var primeiro = null;
+    var radios = p.querySelectorAll('input[type="radio"]');
+    if (radios.length && !p.querySelector('input[type="radio"]:checked')) {
+      p.querySelector('.diag-erro').textContent = 'Escolha uma opção para continuar.';
+      primeiro = radios[0];
+    }
+    [].forEach.call(p.querySelectorAll('input:not([type="radio"])'), function (c) {
+      var v = c.value.trim(), msg = '';
+      if (c.required && v.length < 2) msg = c.getAttribute('data-msg');
+      else if (c.type === 'tel' && v && !/^\d{10,11}$/.test(telefone(v))) msg = 'Informe o WhatsApp com DDD, por exemplo (11) 91234-5678.';
+      else if (c.type === 'email' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) msg = 'Confira o e-mail.';
+      if (!erro(c, msg) && !primeiro) primeiro = c;
+    });
+    if (primeiro) primeiro.focus();
+    return !primeiro;
+  }
+
+  function avancar() {
+    if (!valida(passos[atual])) return;
+    if (atual < total - 1) mostrar(atual + 1, true);
+    else enviar();
+  }
+
+  function dados() {
+    var d = {
+      'Empresa': valor('empresa'),
+      'Nome': valor('nome'),
+      'WhatsApp': valor('whatsapp'),
+      'Já exporta': valor('ja_exporta'),
+      'Segmento': valor('segmento'),
+      'Produto': valor('produto'),
+      'Mercado': valor('mercado'),
+      'Chamar no WhatsApp': 'https://wa.me/55' + telefone(valor('whatsapp')),
+      'Palavra-chave do anúncio': params.get('utm_term') || '',
+      'Campanha': params.get('utm_campaign') || '',
+      'Origem': params.get('utm_source') || '',
+      'gclid': params.get('gclid') || '',
+      '_subject': 'Novo diagnóstico BoraExportar: ' + valor('empresa'),
+      '_gotcha': valor('_gotcha')
+    };
+    // O Formspree usa "email" como responder-para; vazio, fica de fora
+    if (valor('email')) d.email = valor('email');
+    return d;
+  }
+
+  function linkWhats(d) {
+    var txt = 'Olá! Fiz o diagnóstico de prontidão no site.\nEmpresa: ' + d['Empresa'] + '\nProduto: ' + d['Produto'] +
+      '\nJá exporta: ' + d['Já exporta'] + '\nMercado: ' + d['Mercado'];
+    return 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(txt);
+  }
+
+  function fim(ok, d) {
+    [].forEach.call(form.querySelectorAll('.diag-sub, .diag-prog, .diag-passo, .diag-acoes, .diag-aviso, .diag-rodape'), function (el) {
+      el.hidden = true;
+    });
+    var painel = form.querySelector(ok ? '.diag-ok' : '.diag-falha');
+    [].forEach.call(painel.querySelectorAll('[data-nome]'), function (el) { el.textContent = d['Nome'].split(' ')[0]; });
+    [].forEach.call(painel.querySelectorAll('[data-whats]'), function (el) { el.textContent = d['WhatsApp']; });
+    painel.querySelector('a.diag-zap').href = linkWhats(d);
+    painel.hidden = false;
+    painel.focus();
+  }
+
+  function enviar() {
+    var d = dados();
+    if (!FORMSPREE_ID) {
+      evento('diagnostico_erro', {'motivo': 'formspree_sem_id'});
+      fim(false, d);
+      return;
+    }
+    enviando = true;
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+    fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+      method: 'POST',
+      headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+      body: JSON.stringify(d)
+    }).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      evento('generate_lead', {'currency': 'BRL', 'value': 1, 'segmento': d['Segmento'], 'ja_exporta': d['Já exporta']});
+      if (ADS_CONVERSAO_FORMULARIO) gtag('event', 'conversion', {'send_to': ADS_CONVERSAO_FORMULARIO, 'value': 1.0, 'currency': 'BRL'});
+      fim(true, d);
+    }).catch(function (e) {
+      evento('diagnostico_erro', {'motivo': String(e && e.message || e)});
+      fim(false, d);
+    }).then(function () {
+      enviando = false;
+      btn.disabled = false;
+    });
+  }
+
+  // Toque ou clique numa opção já avança; pelo teclado, a pessoa confirma em "Continuar"
+  form.addEventListener('pointerdown', function (e) {
+    porPonteiro = !!(e.target.closest && e.target.closest('.diag-op'));
+  });
+  form.addEventListener('keydown', function () { porPonteiro = false; });
+  form.addEventListener('change', function (e) {
+    var r = e.target;
+    if (r.type !== 'radio') return;
+    [].forEach.call(form.querySelectorAll('input[name="' + r.name + '"]'), function (o) {
+      o.closest('.diag-op').classList.toggle('is-sel', o.checked);
+    });
+    passos[atual].querySelector('.diag-erro').textContent = '';
+    if (!iniciou) { iniciou = true; evento('diagnostico_inicio'); }
+    if (porPonteiro) {
+      var idx = atual;
+      setTimeout(function () { if (atual === idx && !enviando) avancar(); }, 260);
+    }
+  });
+  form.addEventListener('input', function (e) {
+    var c = e.target;
+    if (c.getAttribute('aria-invalid')) erro(c, '');
+    if (c.type !== 'tel') return;
+    var d = telefone(c.value).slice(0, 11);
+    c.value = d.length > 10 ? '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7)
+      : d.length > 6 ? '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6)
+      : d.length > 2 ? '(' + d.slice(0, 2) + ') ' + d.slice(2) : d;
+  });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!enviando) avancar();
+  });
+  voltar.addEventListener('click', function () {
+    if (atual > 0) mostrar(atual - 1, true);
+  });
+
+  // Os botões "#diagnostico" da página levam ao formulário
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href="#diagnostico"]');
+    if (!a) return;
+    evento('diagnostico_cta', {'event_label': a.textContent.trim().replace(/\s+/g, ' ')});
+    setTimeout(function () { document.getElementById('diag-titulo').focus({preventScroll: true}); }, 450);
+  });
+
+  // O botão flutuante do WhatsApp some onde a página já mostra o WhatsApp: no topo (com o formulário) e no fechamento
+  var fab = document.querySelector('.fab');
+  if (fab && 'IntersectionObserver' in window) {
+    var naTela = [];
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var i = naTela.indexOf(e.target);
+        if (e.isIntersecting && i < 0) naTela.push(e.target);
+        if (!e.isIntersecting && i >= 0) naTela.splice(i, 1);
+      });
+      fab.classList.toggle('fab-off', naTela.length > 0);
+    });
+    io.observe(form.closest('section') || form);
+    [].forEach.call(document.querySelectorAll('[data-sem-fab]'), function (el) { io.observe(el); });
+  }
+})();
+</script>
 
 </div>
 </body>
