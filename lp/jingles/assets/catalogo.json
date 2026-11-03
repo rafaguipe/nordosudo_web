@@ -1,0 +1,157 @@
+{
+  "versao": 1,
+  "atualizado": "2026-11-03",
+  "whatsapp": "5511943971961",
+  "msg_modelo": {
+    "pt": "Olá! Ouvi {titulo} no site da Nordosudo e quero uma música personalizada.",
+    "es": "¡Hola! Escuché {titulo} en el sitio de Nordosudo y quiero una canción personalizada.",
+    "en": "Hi! I heard {titulo} on the Nordosudo site and I would like a personalized song."
+  },
+  "rotulos": {
+    "filtros": { "todas": { "pt": "Todas", "es": "Todas", "en": "All" },
+                 "empresas": { "pt": "Empresas", "es": "Empresas", "en": "Businesses" },
+                 "eventos": { "pt": "Eventos", "es": "Eventos", "en": "Events" },
+                 "pessoais": { "pt": "Pessoais", "es": "Personales", "en": "Personal" } },
+    "idiomas": { "es": { "pt": "Espanhol", "es": "Español", "en": "Spanish" },
+                 "pt": { "pt": "Português", "es": "Portugués", "en": "Portuguese" },
+                 "en": { "pt": "Inglês", "es": "Inglés", "en": "English" } },
+    "letra": { "pt": "Ver a letra em PDF ↗", "es": "Ver la letra en PDF ↗", "en": "Read the lyrics (PDF) ↗" },
+    "escutar": { "pt": "Ouvir a música", "es": "Escuchar la canción", "en": "Listen to the song" },
+    "vazio": { "pt": "Nenhuma música nesta categoria por enquanto.", "es": "Todavía no hay canciones en esta categoría.", "en": "No songs in this category yet." }
+  },
+  "itens": [
+    {
+      "id": "motivarte",
+      "ordem": 1,
+      "publicado": true,
+      "titulo": "Motivarte Suardi — Siempre Cerca",
+      "categoria": "empresas",
+      "idioma": "es",
+      "duracao": "49 s",
+      "capa": "assets/webp/motivarte.webp",
+      "audio": "assets/motivarte.mp3",
+      "letra": "assets/motivarte-letra.pdf",
+      "estilo": { "pt": "Empresas · Comércio local", "es": "Empresas · Comercio local", "en": "Business · Local retail" },
+      "descricao": {
+        "pt": "Um jingle animado para a Motivarte Suardi, loja de presentes e brinquedos: novidades, confiança e o prazer de presentear.",
+        "es": "Un jingle animado para Motivarte Suardi, tienda de regalos y juguetes: novedades, confianza y el gusto de regalar.",
+        "en": "An upbeat jingle for Motivarte Suardi, a gifts and toys shop: new arrivals, trust, and the joy of giving."
+      },
+      "cta": { "pt": "Quero um jingle para minha loja ↗", "es": "Quiero un jingle para mi tienda ↗", "en": "I want a jingle for my shop ↗" }
+    },
+    {
+      "id": "laguna-suites",
+      "ordem": 2,
+      "publicado": true,
+      "titulo": "Laguna Suites — Tu Lugar",
+      "categoria": "empresas",
+      "idioma": "es",
+      "duracao": "32 s",
+      "capa": "assets/webp/laguna-suites.webp",
+      "audio": "assets/laguna-suites.mp3",
+      "letra": "assets/laguna-suites-letra.pdf",
+      "estilo": { "pt": "Empresas · Hotelaria", "es": "Empresas · Posada", "en": "Business · Hospitality" },
+      "descricao": {
+        "pt": "Uma canção calma e luminosa para Laguna Suites, hospedagem em Miramar: brisa, natureza e descanso convertidos em identidade sonora.",
+        "es": "Una canción calma y luminosa para Laguna Suites, en Miramar: la brisa, la naturaleza y el descanso convertidos en identidad sonora.",
+        "en": "A calm, luminous song for Laguna Suites in Miramar: breeze, nature, and rest turned into a sonic identity."
+      },
+      "cta": { "pt": "Quero um jingle para meu negócio ↗", "es": "Quiero un jingle para mi negocio ↗", "en": "I want a jingle for my business ↗" }
+    },
+    {
+      "id": "nordosudo",
+      "ordem": 3,
+      "publicado": true,
+      "titulo": "Nordosudo — Conectando Horizontes",
+      "categoria": "empresas",
+      "idioma": "es",
+      "duracao": "45 s",
+      "capa": "assets/webp/nordosudo.webp",
+      "audio": "assets/nordosudo.mp3",
+      "letra": "assets/nordosudo-letra.pdf",
+      "estilo": { "pt": "Empresas · Jingle institucional", "es": "Empresas · Jingle institucional", "en": "Business · Institutional" },
+      "descricao": {
+        "pt": "Uma música sobre conexões, novos horizontes e a vocação de aproximar empresas e mercados.",
+        "es": "Una identidad musical para Nordosudo que transforma su actividad y sus valores en un mensaje sonoro memorable.",
+        "en": "A brand song about new horizons, meaningful connections, and bringing businesses and markets together."
+      },
+      "cta": { "pt": "Quero um jingle para minha empresa ↗", "es": "Quiero un jingle para mi empresa ↗", "en": "I want a song for my business ↗" }
+    },
+    {
+      "id": "ansenuza",
+      "ordem": 4,
+      "publicado": true,
+      "titulo": "Ansenuza Emprende",
+      "categoria": "eventos",
+      "idioma": "es",
+      "duracao": "4 min 42 s",
+      "capa": "assets/webp/ansenuza.webp",
+      "audio": "assets/ansenuza.mp3",
+      "letra": "assets/ansenuza-letra.pdf",
+      "estilo": { "pt": "Eventos · Música temática", "es": "Eventos · Canción temática", "en": "Events · Theme song" },
+      "descricao": {
+        "pt": "Uma canção criada para o encontro Ansenuza Emprende, na Argentina, celebrando empreendedorismo, propósito e cooperação.",
+        "es": "Una canción creada para el encuentro internacional de emprendedores evolutivos en Miramar de Ansenuza, que celebra el propósito, la libertad y la conexión.",
+        "en": "An original song for Ansenuza Emprende in Argentina, celebrating entrepreneurship, purpose, and collaboration."
+      },
+      "cta": { "pt": "Quero uma música para meu evento ↗", "es": "Quiero una canción para mi evento ↗", "en": "I want an event song ↗" }
+    },
+    {
+      "id": "caio-acai",
+      "ordem": 5,
+      "publicado": true,
+      "titulo": "Caio y Açaí",
+      "categoria": "pessoais",
+      "idioma": "es",
+      "duracao": "1 min 23 s",
+      "capa": "assets/webp/caio-acai.webp",
+      "audio": "assets/caio-acai.mp3",
+      "letra": "assets/caio-acai-letra.pdf",
+      "estilo": { "pt": "Pessoais · Pets", "es": "Personales · Mascotas", "en": "Personal · Pets" },
+      "descricao": {
+        "pt": "Uma canção leve e afetuosa sobre dois gatos, suas personalidades e as pequenas aventuras do cotidiano.",
+        "es": "Una canción alegre y tierna sobre dos gatos y sus travesuras. Una muestra de cómo las historias cotidianas pueden convertirse en recuerdos únicos.",
+        "en": "A playful, heartfelt song about two cats, their personalities, and everyday adventures."
+      },
+      "cta": { "pt": "Quero uma música para meu pet ↗", "es": "Quiero una canción para mi mascota ↗", "en": "I want a song for my pet ↗" }
+    },
+    {
+      "id": "feijao-vo-didia",
+      "ordem": 6,
+      "publicado": true,
+      "titulo": "Feijão da Vó Dídia",
+      "categoria": "pessoais",
+      "idioma": "pt",
+      "duracao": "3 min 32 s",
+      "capa": "assets/webp/feijao-vo-didia.webp",
+      "audio": "assets/feijao-vo-didia.mp3",
+      "letra": "assets/feijao-vo-didia-letra.pdf",
+      "estilo": { "pt": "Pessoais · Família e memória", "es": "Personales · Familia y memoria", "en": "Personal · Family and memory" },
+      "descricao": {
+        "pt": "Uma homenagem às memórias de família, aos sabores e aos momentos compartilhados ao redor da Vó Dídia.",
+        "es": "Un homenaje musical a una abuela de Taquari, sus recetas, su jardín y los encuentros familiares.",
+        "en": "A heartfelt tribute to family memories, familiar flavors, and the moments shared around Grandma Dídia."
+      },
+      "cta": { "pt": "Quero homenagear alguém ↗", "es": "Quiero homenajear a alguien ↗", "en": "I want to honor someone ↗" }
+    },
+    {
+      "id": "halloween-canada",
+      "ordem": 7,
+      "publicado": true,
+      "titulo": "My First Halloween in Canada",
+      "categoria": "pessoais",
+      "idioma": "en",
+      "duracao": "2 min 45 s",
+      "capa": "assets/webp/my-first-halloween-in-canada.webp",
+      "audio": "assets/my-first-halloween-in-canada.mp3",
+      "letra": "assets/my-first-halloween-in-canada-lyrics.pdf",
+      "estilo": { "pt": "Pessoais · Celebração", "es": "Personales · Celebración", "en": "Personal · Halloween" },
+      "descricao": {
+        "pt": "Uma canção pop sobre o primeiro Halloween de Beatriz no Canadá, com a família anfitriã, novos amigos e lembranças do Brasil.",
+        "es": "Una canción pop sobre el primer Halloween de Beatriz en Canadá, con su familia anfitriona, nuevos amigos y recuerdos de Brasil.",
+        "en": "A personalized pop song celebrating Beatriz’s first Halloween in Lake Country, Canada, with her host family, new friends, and memories of home in Brazil."
+      },
+      "cta": { "pt": "Quero uma música para celebrar ↗", "es": "Quiero una canción para celebrar ↗", "en": "I want a song to celebrate ↗" }
+    }
+  ]
+}
