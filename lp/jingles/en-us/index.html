@@ -56,5 +56,5 @@ const messages={
 document.querySelectorAll('[data-wa]').forEach(el=>{const key=el.dataset.wa;el.href='https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(messages[key]||messages.geral);el.target='_blank';el.rel='noopener noreferrer';el.addEventListener('click',()=>{if(typeof gtag==='function')gtag('event','clicar_whatsapp',{origem:key});});});
 document.getElementById('year').textContent=new Date().getFullYear();
 </script>
-<script defer src="../assets/js/catalogo.js"></script>
+<script defer src="../assets/js/catalogo.js?v=20261103c"></script>
 </body></html>

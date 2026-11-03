@@ -13,6 +13,15 @@
   var loc = (document.documentElement.lang || "pt-BR").slice(0, 2).toLowerCase();
   if (["pt", "es", "en"].indexOf(loc) < 0) loc = "pt";
 
+  /* Ordem de exibição por idioma da página: idioma da página primeiro,
+     depois os demais na sequência editorial. Dentro de cada idioma a ordem
+     é a do campo "ordem" do catálogo. */
+  var ORDEM_IDIOMA = {
+    pt: ["pt", "es", "en"],
+    es: ["es", "pt", "en"],
+    en: ["en", "pt", "es"]
+  };
+
   var txt = {
     erro: {
       pt: "Não foi possível carregar o catálogo agora.",
@@ -32,6 +41,13 @@
   };
 
   var ROT = null;
+
+  /* 0 = idioma da página; 1 e 2 = demais, na ordem definida; idioma
+     desconhecido vai para o fim sem quebrar a renderização. */
+  function prioridadeIdioma(idioma) {
+    var i = ORDEM_IDIOMA[loc].indexOf(idioma);
+    return i < 0 ? ORDEM_IDIOMA[loc].length : i;
+  }
 
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -152,7 +168,11 @@
         vazio: d.rotulos.vazio
       };
       var itens = d.itens.filter(function (i) { return i.publicado; })
-        .sort(function (a, b) { return a.ordem - b.ordem; });
+        .sort(function (a, b) {
+          var pa = prioridadeIdioma(a.idioma);
+          var pb = prioridadeIdioma(b.idioma);
+          return pa !== pb ? pa - pb : a.ordem - b.ordem;
+        });
       buildFilters();
       render(itens);
     })
