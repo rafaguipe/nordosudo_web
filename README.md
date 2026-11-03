@@ -25,7 +25,7 @@ Site oficial da Nordosudo — plataforma boutique de internacionalização para 
 | Termos de Uso | `termos-de-uso.html` | LGPD |
 | Política de Cookies | `politica-de-cookies.html` | LGPD |
 | 404 | `404.html` | Página de erro customizada |
-| LP BoraExportar | `lp/boraexportar/index.html` | Landing page de venda (tráfego pago), CTAs para WhatsApp, `noindex` e fora do sitemap |
+| LP BoraExportar | `lp/boraexportar/index.html` | Landing page de venda (tráfego pago), formulário de consultoria gratuita (Formspree) no topo, `noindex` e fora do sitemap |
 
 ## ✍️ Blog
 

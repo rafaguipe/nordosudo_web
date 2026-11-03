@@ -37,6 +37,13 @@ var ADS_CONVERSAO_WHATSAPP = 'AW-17526792382/Xw2MCJaMyJ8dEL7BtqVB';
 var ADS_CONVERSAO_FORMULARIO = 'AW-17526792382/nmnACO3SnK8dEL7BtqVB';
 // ID do formulário no Formspree (o trecho depois de /f/); vazio = as respostas viram mensagem de WhatsApp
 var FORMSPREE_ID = 'mgaalpry';
+// ID do projeto no Microsoft Clarity (mapa de calor e gravação das visitas); vazio = não carrega
+var CLARITY_ID = '';
+if (CLARITY_ID) (function (c, l, a, r, i, t, y) {
+  c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+  t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+  y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+})(window, document, 'clarity', 'script', CLARITY_ID);
 // Cada clique num link de WhatsApp vira o evento whatsapp_click
 document.addEventListener('click', function (e) {
   var a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
@@ -136,14 +143,16 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 .diag-selo-brinde{position:absolute;top:0;left:clamp(20px,2.4vw,30px);right:clamp(20px,2.4vw,30px);width:max-content;max-width:calc(100% - 2*clamp(20px,2.4vw,30px));transform:translateY(-50%);box-sizing:border-box;display:flex;align-items:center;gap:8px;padding:8px 16px 8px 12px;border-radius:999px;background:linear-gradient(135deg,#E9CF86 0%,#C9A74D 55%,#B08A2E 100%);color:#121E34;font-size:13.5px;font-weight:800;line-height:1.25;box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.45)}
 @media (max-width:480px){.diag.tem-selo{padding-top:clamp(20px,2.4vw,30px)}.diag-selo-brinde{position:static;transform:none;width:auto;max-width:none;margin:0 0 16px;padding:9px 14px;border-radius:14px;font-size:13.5px;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}}
 .diag-topo{display:flex;align-items:center;gap:14px}
-.diag-selo{flex:none;width:46px;height:46px;border-radius:12px;background:#121E34;display:flex;align-items:center;justify-content:center}
-.diag-eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#7A5F18}
+.diag-rostos{flex:none;display:flex}
+.diag-rostos img{width:44px;height:44px;box-sizing:border-box;border-radius:50%;border:2px solid #F5F0E4;object-fit:cover;object-position:50% 25%;display:block;box-shadow:0 2px 6px rgba(18,30,52,.18)}
+.diag-rostos img+img{margin-left:-14px}
+.diag-quem{margin-top:3px;font-size:13px;font-weight:600;line-height:1.4;color:#5A6479;text-wrap:balance}
 .diag-titulo{font-size:18px;font-weight:800;line-height:1.3}
 .diag-titulo:focus{outline:none}
 .diag-sub{margin:12px 0 0;font-size:14px;line-height:1.55;color:#4F5B73}
 .diag-prog{margin-top:18px;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600;line-height:1;color:#4F5B73}
 .diag-barra{flex:1 1 auto;height:6px;border-radius:999px;background:#E0D6BE;overflow:hidden}
-.diag-barra>span{display:block;height:100%;width:16.66%;border-radius:inherit;background:linear-gradient(90deg,#C9A74D,#9E7D24);transition:width .35s ease}
+.diag-barra>span{display:block;height:100%;width:20%;border-radius:inherit;background:linear-gradient(90deg,#C9A74D,#9E7D24);transition:width .35s ease}
 .diag fieldset{border:0;margin:0;padding:0;min-width:0}
 .diag legend{float:left;width:100%;margin-bottom:14px;padding:0}
 .diag legend+.diag-ops,.diag legend+.diag-campo{clear:both;margin-top:0}
@@ -181,9 +190,7 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 .diag-btn:focus-visible,.diag-voltar:focus-visible,.diag a:focus-visible{outline:3px solid #C9A74D;outline-offset:2px}
 .diag-aviso{margin:12px 0 0;font-size:13px;line-height:1.5;color:#5A6479}
 .diag-aviso a{color:#121E34;font-weight:600}
-.diag-rodape{margin-top:18px;padding-top:14px;border-top:1px solid #E0D6BE;font-size:14px;line-height:1.5;color:#4F5B73}
-.diag-rodape a{color:#0A6837;font-weight:700}
-.diag-aviso a:hover,.diag-rodape a:hover{color:#121E34}
+.diag-aviso a:hover{color:#121E34}
 .diag-fim{margin-top:18px}
 .diag-fim:focus{outline:none}
 .diag-fim-ico{width:52px;height:52px;margin-bottom:16px;border-radius:50%;background:#121E34;color:#C9A74D;display:flex;align-items:center;justify-content:center}
@@ -193,6 +200,54 @@ h2,details,blockquote,.rv,.stagger>*,.list-rv>*{animation:reveal linear both;ani
 @media (prefers-reduced-motion:no-preference){
 html{scroll-behavior:smooth}
 .diag-passo:not([hidden]),.diag-fim:not([hidden]){animation:fade-up .35s cubic-bezier(.2,.7,.2,1) both}
+}
+/* Topo no celular e no tablet: o formulário vem logo depois da headline */
+@media (max-width:1159px){
+.hero-grade{flex-direction:column;align-items:stretch!important;gap:0!important}
+.hero-texto{display:contents}
+.hero-selo{order:1;align-self:flex-start}
+.hero-grade h1{order:2}
+.hero-form{order:3;flex:none!important;width:100%;margin:28px auto 0!important}
+.hero-sub{order:4;margin-top:36px!important}
+.hero-cta{display:none!important}
+.hero-provas{order:5}
+}
+@media (max-width:600px){.hero-grade{padding-top:32px!important}}
+/* Rota da exportação (seção Como funciona) */
+.rota{margin-top:40px;box-sizing:border-box;padding:30px clamp(16px,3vw,40px) 26px;border-radius:20px;background:#121E34}
+.rota-nos{position:relative;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.rota-nos::before{content:"";position:absolute;top:24px;left:10%;right:10%;height:2px;border-radius:2px;background:#C9A74D;transform-origin:0 50%}
+.rota-nos li{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;min-width:0}
+.rota-no{flex:none;width:48px;height:48px;box-sizing:border-box;border-radius:50%;border:1.5px solid #C9A74D;background:#172641;color:#E3C77A;display:flex;align-items:center;justify-content:center}
+.rota-fim .rota-no{background:#C9A74D;color:#121E34}
+.rota-rotulo{font-size:14.5px;font-weight:700;line-height:1.3;color:#F5F0E4}
+.rota-prazo{margin:16px 0 0 10%;width:60%;text-align:center;font-size:14px;font-weight:700;line-height:1.4;color:#E3C77A}
+.rota-prazo::before{content:"";display:block;height:10px;margin-bottom:10px;box-sizing:border-box;border:1.5px solid rgba(201,167,77,.6);border-top:0;border-radius:0 0 6px 6px}
+/* Celular: rota na vertical e cards em linha (ícone ao lado do texto), para encurtar a rolagem */
+@media (max-width:600px){
+.rota{padding:22px 20px}
+.rota-nos{grid-template-columns:1fr;gap:14px}
+.rota-nos::before{top:24px;bottom:24px;left:23px;right:auto;width:2px;height:auto}
+.rota-nos li{flex-direction:row;text-align:left;gap:14px}
+.rota-prazo{margin:18px 0 0;width:auto;text-align:left;padding:10px 14px;border-radius:12px;background:rgba(201,167,77,.12)}
+.rota-prazo::before{display:none}
+.cartoes-perfil,.cartoes-entrega,.steps{gap:12px!important}
+.cartoes-perfil>div{display:flex;align-items:flex-start;gap:14px;padding:18px!important}
+.cartoes-perfil>div>span,.cartoes-entrega>div:not(.cartao-cta)>span{flex:none;width:40px!important;height:40px!important;border-radius:12px!important}
+.cartoes-perfil>div>p{margin:0!important;font-size:16px!important}
+.cartoes-entrega>div:not(.cartao-cta){display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:14px;padding:18px!important}
+.cartoes-entrega>div:not(.cartao-cta)>span{grid-row:1/3}
+.cartoes-entrega h3{margin:0!important;font-size:17px!important}
+.cartoes-entrega>div:not(.cartao-cta)>p{margin:4px 0 0!important;font-size:14.5px!important}
+.steps>li{padding:22px!important}
+.steps>li>div>span:first-child{font-size:34px!important}
+.steps h3{margin-top:16px!important}
+}
+@media (prefers-reduced-motion:no-preference) and (min-width:601px){
+@supports (animation-timeline:view()){
+.rota-nos::before{animation:draw linear both;animation-timeline:view();animation-range:entry 40% cover 40%}
+.rota-no{animation:pop linear both;animation-timeline:view();animation-range:entry 50% cover 35%}
+}
 }
 </style>
 </head>
@@ -206,7 +261,7 @@ html{scroll-behavior:smooth}
 </div>
 </header>
 
-<section style="position: relative; overflow: hidden; background: #121E34">
+<section style="position: relative; overflow: hidden; overflow: clip; background: #121E34">
 <svg class="spin-slow" aria-hidden="true" viewBox="0 0 800 800" fill="none" stroke="#C9A74D" style="position: absolute; top: -150px; right: -280px; width: 940px; height: 940px; opacity: 0.11; stroke-width: 1.2; pointer-events: none">
 <circle cx="400" cy="400" r="380"></circle>
 <ellipse cx="400" cy="400" rx="285" ry="380"></ellipse>
@@ -219,33 +274,33 @@ html{scroll-behavior:smooth}
 <line x1="143" y1="120" x2="657" y2="120"></line>
 <line x1="143" y1="680" x2="657" y2="680"></line>
 </svg>
-<div style="position: relative; max-width: 1240px; margin: 0 auto; box-sizing: border-box; padding: clamp(56px, 7vw, 96px) clamp(20px, 4vw, 32px) clamp(72px, 8vw, 112px); display: flex; flex-wrap: wrap; align-items: center; gap: 56px">
-<div style="flex: 1 1 600px; min-width: 0">
-<div class="h-in" style="display: inline-flex; align-items: center; gap: 10px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(201, 167, 77, 0.38); background: rgba(201, 167, 77, 0.08); color: #E3C77A; font-size: 13px; font-weight: 600; line-height: 1.4"><svg class="needle" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="flex: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg>BoraExportar · Consultoria de exportação</div>
+<div class="hero-grade" style="position: relative; max-width: 1240px; margin: 0 auto; box-sizing: border-box; padding: clamp(56px, 7vw, 96px) clamp(20px, 4vw, 32px) clamp(72px, 8vw, 112px); display: flex; flex-wrap: wrap; align-items: center; gap: 56px">
+<div class="hero-texto" style="flex: 1 1 600px; min-width: 0">
+<div class="h-in hero-selo" style="display: inline-flex; align-items: center; gap: 10px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(201, 167, 77, 0.38); background: rgba(201, 167, 77, 0.08); color: #E3C77A; font-size: 13px; font-weight: 600; line-height: 1.4"><svg class="needle" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="flex: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg>BoraExportar · Consultoria de exportação</div>
 <h1 class="h-in d1" style="margin: 24px 0 0; font-size: clamp(32px, 3.4vw, 50px); line-height: 1.08; letter-spacing: -0.025em; font-weight: 800; color: #F5F0E4">Venda para o exterior <span style="color: #C9A74D">com segurança</span>: estruturamos a exportação da sua empresa.</h1>
-<p class="h-in d2" style="margin: 24px 0 0; max-width: 600px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.65; color: #C9D0DC">Com o BoraExportar, a Nordosudo estrutura documentação, conformidade regulatória, precificação e logística para sua empresa vender para fora sem surpresas. Você sabe quanto vai ganhar antes de negociar e tem especialistas ao seu lado nos primeiros embarques.</p>
-<div class="h-in d3" style="margin-top: 36px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px">
+<p class="h-in d2 hero-sub" style="margin: 24px 0 0; max-width: 600px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.65; color: #C9D0DC">A Nordosudo cuida da documentação, da conformidade, do preço e da logística antes do primeiro embarque. Você sabe quanto vai ganhar antes de negociar.</p>
+<div class="h-in d3 hero-cta" style="margin-top: 36px; display: flex; flex-direction: column; align-items: flex-start; gap: 12px">
 <a class="cta shine cta-diag" href="#diagnostico" style="display: inline-flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 28px 12px 12px; box-sizing: border-box; border-radius: 999px; font-size: 17px; font-weight: 800; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>Consultoria gratuita</a>
-<span style="font-size: 14px; color: #8F9BB0">6 perguntas rápidas, sem compromisso · Prefere conversar? <a href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="font-weight: 600">Chame no WhatsApp</a></span>
+<span style="font-size: 14px; color: #8F9BB0">Leva 1 minuto · Sem compromisso · Para empresas com CNPJ</span>
 </div>
-<ul class="h-in d4" style="list-style: none; margin: 40px 0 0; padding: 24px 0 0; border-top: 1px solid rgba(201, 167, 77, 0.18); display: flex; flex-wrap: wrap; gap: 14px 28px">
-<li style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; line-height: 1.4; color: #E9E3D3"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A74D" style="flex: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg>Especialistas em exportação</li>
-<li style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; line-height: 1.4; color: #E9E3D3"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A74D" style="flex: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg>Fundadores com mais de 25 anos em negócios internacionais</li>
+<ul class="h-in d4 hero-provas" style="list-style: none; margin: 40px 0 0; padding: 24px 0 0; border-top: 1px solid rgba(201, 167, 77, 0.18); display: flex; flex-wrap: wrap; gap: 14px 28px">
+<li style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; line-height: 1.4; color: #E9E3D3"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A74D" style="flex: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg>Fundadores com +25 anos em negócios internacionais, com passagem por Bayer e ZEISS</li>
+<li style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; line-height: 1.4; color: #E9E3D3"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A74D" style="flex: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg>Atendimento direto com os fundadores</li>
 <li style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; line-height: 1.4; color: #E9E3D3"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A74D" style="flex: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg>Operação estruturada em 4 a 8 semanas, em média</li>
 </ul>
 </div>
-<div style="flex: 1 1 440px; min-width: 0; max-width: 540px; margin: 0 auto">
+<div class="hero-form" style="flex: 1 1 440px; min-width: 0; max-width: 540px; margin: 0 auto">
 <form id="diagnostico" class="diag tem-selo h-rise d1" novalidate aria-labelledby="diag-titulo">
 <div class="diag-selo-brinde"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="flex: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect x="3" y="8" width="18" height="4" rx="1"></rect><path d="M12 8v13"></path><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"></path><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"></path></svg><span>Ganhe uma consultoria de exportação gratuita</span></div>
 <div class="diag-topo">
-<span class="diag-selo"><img src="assets/icone-nordosudo.png" alt="" style="width: 26px; height: auto; display: block"></span>
+<span class="diag-rostos"><img src="assets/fundador-rafael.jpg" alt="" width="44" height="44" decoding="async"><img src="assets/fundadora-vania.jpg" alt="" width="44" height="44" decoding="async"></span>
 <div style="min-width: 0">
-<div class="diag-eyebrow">BoraExportar</div>
 <div class="diag-titulo" id="diag-titulo" tabindex="-1">Diagnóstico de prontidão exportadora</div>
+<div class="diag-quem">Atendimento direto com os fundadores, Rafael e Vânia</div>
 </div>
 </div>
-<p class="diag-sub">Responda 6 perguntas rápidas e um especialista da Nordosudo te chama no WhatsApp para agendar sua consultoria gratuita.</p>
-<div class="diag-prog" aria-hidden="true"><span class="diag-contador">Pergunta 1 de 6</span><span class="diag-barra"><span></span></span></div>
+<p class="diag-sub">Leva 1 minuto. Responda 5 perguntas e te chamamos no WhatsApp para agendar sua consultoria gratuita.</p>
+<div class="diag-prog" aria-hidden="true"><span class="diag-contador">Pergunta 1 de 5</span><span class="diag-barra"><span></span></span></div>
 <p class="sr-only" id="diag-status" aria-live="polite"></p>
 <fieldset class="diag-passo" data-passo="ja_exporta">
 <legend>Sua empresa já exporta?</legend>
@@ -267,13 +322,8 @@ html{scroll-behavior:smooth}
 <label class="diag-op"><input type="radio" name="segmento" value="Outro segmento"><span class="marca"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round"><path d="M20 6 9 17l-5-5"></path></svg></span><span>Outro segmento</span></label>
 </div>
 <p class="diag-erro" role="alert"></p>
+<div class="diag-campo diag-extra" hidden><label for="diag-produto">Qual é o principal produto? <span class="diag-opcional">(opcional)</span></label><input id="diag-produto" name="produto" type="text" autocomplete="off" maxlength="120" placeholder="Ex.: café torrado, calçados, móveis" data-erro="diag-produto-erro" aria-describedby="diag-produto-erro"><p class="diag-erro" id="diag-produto-erro" role="alert"></p></div>
 </fieldset>
-<div class="diag-passo" data-passo="produto" hidden>
-<label class="diag-pergunta" for="diag-produto">Qual é o principal produto que vocês querem exportar?</label>
-<p class="diag-ajuda" id="diag-produto-ajuda">Ex.: café torrado, cosméticos naturais, calçados, móveis de madeira.</p>
-<div class="diag-campo"><input id="diag-produto" name="produto" type="text" required autocomplete="off" maxlength="120" data-erro="diag-produto-erro" data-msg="Conte qual é o produto." aria-describedby="diag-produto-ajuda diag-produto-erro"></div>
-<p class="diag-erro" id="diag-produto-erro" role="alert"></p>
-</div>
 <fieldset class="diag-passo" data-passo="mercado" hidden>
 <legend>Para onde querem vender?</legend>
 <div class="diag-ops">
@@ -314,7 +364,6 @@ html{scroll-behavior:smooth}
 <p class="diag-ajuda" style="font-size: 15px">Suas respostas estão guardadas: mande pelo WhatsApp e um especialista continua a partir delas.</p>
 <a class="diag-zap" href="https://wa.me/5511943971961" target="_blank" rel="noopener"><span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Enviar pelo WhatsApp</a>
 </div>
-<div class="diag-rodape">Prefere conversar agora? <a href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener">Chame no WhatsApp</a></div>
 </form>
 </div>
 </div>
@@ -324,7 +373,7 @@ html{scroll-behavior:smooth}
 <div style="max-width: 1240px; margin: 0 auto; box-sizing: border-box; padding: clamp(64px, 7vw, 104px) clamp(20px, 4vw, 32px)">
 <div style="display: flex; align-items: center; gap: 12px; color: #7A5F18; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase"><span style="flex: none; width: 28px; height: 1px; background: #C9A74D"></span>Para quem é</div>
 <h2 style="margin: 16px 0 0; max-width: 860px; font-size: clamp(28px, 3vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; color: #121E34">O BoraExportar é para a sua empresa se:</h2>
-<div class="stagger lift" style="margin-top: 44px; display: flex; flex-wrap: wrap; gap: 20px">
+<div class="stagger lift cartoes-perfil" style="margin-top: 44px; display: flex; flex-wrap: wrap; gap: 20px">
 <div style="flex: 1 1 250px; min-width: 0; box-sizing: border-box; padding: 28px; border-radius: 18px; background: #F7F2E7; border: 1px solid #E6DCC4">
 <span style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: #121E34; color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg></span>
 <p style="margin: 18px 0 0; font-size: 17px; line-height: 1.55; font-weight: 500; color: #2A3550">Você já tem comprador ou demanda confirmada no exterior e precisa colocar a operação de pé.</p>
@@ -361,7 +410,7 @@ html{scroll-behavior:smooth}
 <p style="margin: 24px 0 0; max-width: 560px; font-size: 17px; line-height: 1.7; color: #C9D0DC">Muitas empresas perdem dinheiro logo na primeira exportação porque subestimam o que vem antes do embarque. RADAR, NCM, Incoterms, exigências sanitárias, landed cost: qualquer item fora do lugar pode virar carga parada, multa ou margem perdida.</p>
 </div>
 <div class="rv" style="flex: 1 1 440px; min-width: 0; position: relative; aspect-ratio: 4 / 3; border-radius: 24px; overflow: hidden; background: #172641; border: 1px solid rgba(201, 167, 77, 0.22)">
-<img class="kb" src="assets/problema-conferencia.jpg" loading="lazy" decoding="async" alt="Profissional de logística conferindo contêineres no porto" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; display: block">
+<img class="kb" src="assets/problema-conferencia.jpg" srcset="assets/problema-conferencia-800.jpg 800w, assets/problema-conferencia.jpg 1600w" sizes="(max-width: 1000px) 100vw, 560px" loading="lazy" decoding="async" alt="Profissional de logística conferindo contêineres no porto" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; display: block">
 </div>
 </div>
 <h3 style="margin: 56px 0 0; font-size: 20px; line-height: 1.3; font-weight: 800; color: #F5F0E4">O que acontece quando se exporta sem preparo</h3>
@@ -400,7 +449,7 @@ html{scroll-behavior:smooth}
 <h2 style="margin: 16px auto 0; max-width: 900px; font-size: clamp(28px, 3vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; color: #F5F0E4">BoraExportar: a metodologia da Nordosudo que transforma sua empresa em <span style="color: #C9A74D">exportadora de verdade</span>.</h2>
 <p style="margin: 22px auto 0; max-width: 760px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.7; color: #C9D0DC">Do diagnóstico de prontidão à coordenação dos primeiros embarques, estruturamos cada parte da operação para sua empresa vender ao mercado internacional com segurança, agilidade e conformidade.</p>
 <div class="rv" style="margin-top: 48px; position: relative; aspect-ratio: 21 / 9; border-radius: 28px; overflow: hidden; background: #172641; border: 1px solid rgba(201, 167, 77, 0.22); text-align: left">
-<img class="kb" src="assets/solucao-navio.jpg" loading="lazy" decoding="async" alt="Navio porta-contêineres atracado no porto" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; display: block">
+<img class="kb" src="assets/solucao-navio.jpg" srcset="assets/solucao-navio-800.jpg 800w, assets/solucao-navio.jpg 1500w" sizes="(max-width: 1240px) 100vw, 1176px" loading="lazy" decoding="async" alt="Navio porta-contêineres atracado no porto" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; display: block">
 <div aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(14, 24, 43, 0) 55%, rgba(14, 24, 43, 0.65) 100%)"></div>
 </div>
 <blockquote style="position: relative; width: calc(100% - 2 * clamp(12px, 4vw, 64px)); max-width: 880px; margin: clamp(-96px, -7vw, -24px) auto 0; box-sizing: border-box; padding: clamp(24px, 4vw, 44px) clamp(20px, 4vw, 52px); border-radius: 24px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.30); box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45)">
@@ -410,42 +459,52 @@ html{scroll-behavior:smooth}
 </div>
 </section>
 
-<section id="como-funciona" style="background: #121E34">
+<section id="como-funciona" class="secao-clara" style="background: #F5F0E4">
 <div style="max-width: 1240px; margin: 0 auto; box-sizing: border-box; padding: clamp(64px, 7vw, 104px) clamp(20px, 4vw, 32px)">
-<div style="display: flex; align-items: center; gap: 12px; color: #C9A74D; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase"><span style="flex: none; width: 28px; height: 1px; background: #C9A74D"></span>Como funciona</div>
-<h2 style="margin: 16px 0 0; max-width: 860px; font-size: clamp(28px, 3vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; color: #F5F0E4">Um método modular, progressivo e sob medida</h2>
+<div style="display: flex; align-items: center; gap: 12px; color: #7A5F18; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase"><span style="flex: none; width: 28px; height: 1px; background: #C9A74D"></span>Como funciona</div>
+<h2 style="margin: 16px 0 0; max-width: 860px; font-size: clamp(28px, 3vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; color: #121E34">Um método modular, progressivo e sob medida</h2>
+<div class="rota rv">
+<ol class="rota-nos" aria-label="A rota da exportação">
+<li><span class="rota-no"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M17 18h1"></path><path d="M12 18h1"></path><path d="M7 18h1"></path></svg></span><span class="rota-rotulo">Sua fábrica</span></li>
+<li><span class="rota-no"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></span><span class="rota-rotulo">RADAR e NCM</span></li>
+<li><span class="rota-no"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg></span><span class="rota-rotulo">Documentos e preço</span></li>
+<li><span class="rota-no"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round"><path d="M12 10.189V14"></path><path d="M12 2v3"></path><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"></path><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-8.188-3.639a2 2 0 0 0-1.624 0L3 14a11.6 11.6 0 0 0 2.81 7.76"></path><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path></svg></span><span class="rota-rotulo">Embarque no porto</span></li>
+<li class="rota-fim"><span class="rota-no"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg></span><span class="rota-rotulo">Comprador lá fora</span></li>
+</ol>
+<p class="rota-prazo">Pronta para embarcar em 4 a 8 semanas, em média</p>
+</div>
 <ol class="stagger lift steps" style="list-style: none; margin: 44px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 20px">
-<li style="flex: 1 1 250px; min-width: 0; box-sizing: border-box; padding: 28px; border-radius: 18px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
+<li style="flex: 1 1 250px; min-width: 0; box-sizing: border-box; padding: 28px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E6DCC4">
 <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
-<span style="font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -0.03em; color: #C9A74D">01</span>
-<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>
+<span style="font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -0.03em; color: #7A5F18">01</span>
+<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: #121E34; color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>
 </div>
-<h3 style="margin: 24px 0 0; font-size: 20px; line-height: 1.3; font-weight: 800; color: #F5F0E4">Diagnóstico</h3>
-<p style="margin: 10px 0 0; font-size: 15.5px; line-height: 1.6; color: #C9D0DC">Avaliamos a prontidão exportadora da sua empresa em todas as frentes — regulatória, documental, logística, comercial e financeira. Você sai sabendo onde está e o que falta.</p>
+<h3 style="margin: 24px 0 0; font-size: 20px; line-height: 1.3; font-weight: 800; color: #121E34">Diagnóstico</h3>
+<p style="margin: 10px 0 0; font-size: 15.5px; line-height: 1.6; color: #2A3550">Avaliamos a prontidão exportadora da sua empresa em todas as frentes — regulatória, documental, logística, comercial e financeira. Você sai sabendo onde está e o que falta.</p>
 </li>
-<li style="flex: 1 1 250px; min-width: 0; box-sizing: border-box; padding: 28px; border-radius: 18px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
+<li style="flex: 1 1 250px; min-width: 0; box-sizing: border-box; padding: 28px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E6DCC4">
 <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
-<span style="font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -0.03em; color: #C9A74D">02</span>
-<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"></path><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"></path><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"></path></svg></span>
+<span style="font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -0.03em; color: #7A5F18">02</span>
+<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: #121E34; color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"></path><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"></path><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"></path></svg></span>
 </div>
-<h3 style="margin: 24px 0 0; font-size: 20px; line-height: 1.3; font-weight: 800; color: #F5F0E4">Estruturação</h3>
-<p style="margin: 10px 0 0; font-size: 15.5px; line-height: 1.6; color: #C9D0DC">Montamos a base regulatória, documental e de precificação para sua operação ficar em conformidade com o mercado de destino.</p>
+<h3 style="margin: 24px 0 0; font-size: 20px; line-height: 1.3; font-weight: 800; color: #121E34">Estruturação</h3>
+<p style="margin: 10px 0 0; font-size: 15.5px; line-height: 1.6; color: #2A3550">Montamos a base regulatória, documental e de precificação para sua operação ficar em conformidade com o mercado de destino.</p>
 </li>
-<li style="flex: 1 1 250px; min-width: 0; box-sizing: border-box; padding: 28px; border-radius: 18px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
+<li style="flex: 1 1 250px; min-width: 0; box-sizing: border-box; padding: 28px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E6DCC4">
 <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
-<span style="font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -0.03em; color: #C9A74D">03</span>
-<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg></span>
+<span style="font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -0.03em; color: #7A5F18">03</span>
+<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: #121E34; color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg></span>
 </div>
-<h3 style="margin: 24px 0 0; font-size: 20px; line-height: 1.3; font-weight: 800; color: #F5F0E4">Coordenação</h3>
-<p style="margin: 10px 0 0; font-size: 15.5px; line-height: 1.6; color: #C9D0DC">Conectamos você aos parceiros certos — agentes de carga, despachantes e seguradoras — e coordenamos a execução.</p>
+<h3 style="margin: 24px 0 0; font-size: 20px; line-height: 1.3; font-weight: 800; color: #121E34">Coordenação</h3>
+<p style="margin: 10px 0 0; font-size: 15.5px; line-height: 1.6; color: #2A3550">Conectamos você aos parceiros certos — agentes de carga, despachantes e seguradoras — e coordenamos a execução.</p>
 </li>
-<li style="flex: 1 1 250px; min-width: 0; box-sizing: border-box; padding: 28px; border-radius: 18px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
+<li style="flex: 1 1 250px; min-width: 0; box-sizing: border-box; padding: 28px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E6DCC4">
 <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
-<span style="font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -0.03em; color: #C9A74D">04</span>
-<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path><circle cx="12" cy="12" r="4"></circle></svg></span>
+<span style="font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -0.03em; color: #7A5F18">04</span>
+<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: #121E34; color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path><circle cx="12" cy="12" r="4"></circle></svg></span>
 </div>
-<h3 style="margin: 24px 0 0; font-size: 20px; line-height: 1.3; font-weight: 800; color: #F5F0E4">Suporte contínuo</h3>
-<p style="margin: 10px 0 0; font-size: 15.5px; line-height: 1.6; color: #C9D0DC">Acompanhamos suas primeiras operações para ajustar rotas, destravar gargalos e garantir que o processo se repita.</p>
+<h3 style="margin: 24px 0 0; font-size: 20px; line-height: 1.3; font-weight: 800; color: #121E34">Suporte contínuo</h3>
+<p style="margin: 10px 0 0; font-size: 15.5px; line-height: 1.6; color: #2A3550">Acompanhamos suas primeiras operações para ajustar rotas, destravar gargalos e garantir que o processo se repita.</p>
 </li>
 </ol>
 <div style="margin-top: 40px">
@@ -454,11 +513,11 @@ html{scroll-behavior:smooth}
 </div>
 </section>
 
-<section id="o-que-entregamos" style="background: #0E182B; border-top: 1px solid rgba(201, 167, 77, 0.10)">
+<section id="o-que-entregamos" style="background: #121E34">
 <div style="max-width: 1240px; margin: 0 auto; box-sizing: border-box; padding: clamp(64px, 7vw, 104px) clamp(20px, 4vw, 32px)">
 <div style="display: flex; align-items: center; gap: 12px; color: #C9A74D; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase"><span style="flex: none; width: 28px; height: 1px; background: #C9A74D"></span>O que entregamos</div>
 <h2 style="margin: 16px 0 0; max-width: 760px; font-size: clamp(28px, 3vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; color: #F5F0E4">Tudo o que sua empresa precisa para exportar, em um só lugar</h2>
-<div class="stagger lift" style="margin-top: 44px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px">
+<div class="stagger lift cartoes-entrega" style="margin-top: 44px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px">
 <div style="box-sizing: border-box; padding: 28px; border-radius: 18px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <span style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>
 <h3 style="margin: 20px 0 0; font-size: 18px; line-height: 1.35; font-weight: 800; color: #F5F0E4">Diagnóstico de prontidão exportadora</h3>
@@ -467,7 +526,7 @@ html{scroll-behavior:smooth}
 <div style="box-sizing: border-box; padding: 28px; border-radius: 18px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <span style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><line x1="3" x2="21" y1="22" y2="22"></line><line x1="6" x2="6" y1="18" y2="11"></line><line x1="10" x2="10" y1="18" y2="11"></line><line x1="14" x2="14" y1="18" y2="11"></line><line x1="18" x2="18" y1="18" y2="11"></line><polygon points="12 2 20 7 4 7"></polygon></svg></span>
 <h3 style="margin: 20px 0 0; font-size: 18px; line-height: 1.35; font-weight: 800; color: #F5F0E4">Estruturação regulatória</h3>
-<p style="margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: #C9D0DC">RADAR/Siscomex, NCM, FDA e requisitos sanitários — toda a conformidade que sua operação exige.</p>
+<p style="margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: #C9D0DC">RADAR/Siscomex, NCM, FDA e requisitos sanitários validados antes do embarque, para reduzir o risco de multas e retenções.</p>
 </div>
 <div style="box-sizing: border-box; padding: 28px; border-radius: 18px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <span style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg></span>
@@ -482,80 +541,24 @@ html{scroll-behavior:smooth}
 <div style="box-sizing: border-box; padding: 28px; border-radius: 18px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <span style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><path d="M22 7.7c0-.6-.4-1.2-.8-1.5l-6.3-3.9a1.72 1.72 0 0 0-1.7 0l-10.3 6c-.5.2-.9.8-.9 1.4v6.6c0 .5.4 1.2.8 1.5l6.3 3.9a1.72 1.72 0 0 0 1.7 0l10.3-6c.5-.3.9-1 .9-1.5Z"></path><path d="M10 21.9V14L2.1 9.1"></path><path d="m10 14 11.9-6.9"></path><path d="M14 19.8v-8.1"></path><path d="M18 17.5V9.4"></path></svg></span>
 <h3 style="margin: 20px 0 0; font-size: 18px; line-height: 1.35; font-weight: 800; color: #F5F0E4">Logística internacional</h3>
-<p style="margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: #C9D0DC">Agentes de carga, despachantes e seguros coordenados de ponta a ponta.</p>
+<p style="margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: #C9D0DC">Agentes de carga, despachantes e seguros coordenados de ponta a ponta, com acompanhamento nos primeiros embarques.</p>
 </div>
 <div style="box-sizing: border-box; padding: 28px; border-radius: 18px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <span style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg></span>
 <h3 style="margin: 20px 0 0; font-size: 18px; line-height: 1.35; font-weight: 800; color: #F5F0E4">Landed cost</h3>
-<p style="margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: #C9D0DC">Simulação do custo total da operação, da fábrica até o destino final.</p>
+<p style="margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: #C9D0DC">Custo total da fábrica ao destino e margem real calculados antes de negociar: você sabe quanto vai ganhar.</p>
 </div>
 <div style="box-sizing: border-box; padding: 28px; border-radius: 18px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <span style="width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg></span>
 <h3 style="margin: 20px 0 0; font-size: 18px; line-height: 1.35; font-weight: 800; color: #F5F0E4">Curadoria de parceiros</h3>
-<p style="margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: #C9D0DC">Conexão com parceiros especializados e confiáveis em cada etapa.</p>
+<p style="margin: 8px 0 0; font-size: 15px; line-height: 1.6; color: #C9D0DC">Parceiros que já conhecem o seu tipo de produto e o seu mercado de destino, em cada etapa.</p>
 </div>
-<div style="box-sizing: border-box; padding: 28px; border-radius: 18px; background: rgba(201, 167, 77, 0.10); border: 1px solid rgba(201, 167, 77, 0.45); display: flex; flex-direction: column; justify-content: space-between; gap: 24px">
+<div class="cartao-cta" style="box-sizing: border-box; padding: 28px; border-radius: 18px; background: rgba(201, 167, 77, 0.10); border: 1px solid rgba(201, 167, 77, 0.45); display: flex; flex-direction: column; justify-content: space-between; gap: 24px">
 <div>
 <svg class="needle" aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C9A74D" style="display: block; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round"><circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path></svg>
 <p style="margin: 16px 0 0; font-size: 22px; line-height: 1.3; font-weight: 800; color: #F5F0E4">Pronto para começar?</p>
 </div>
 <a class="cta shine cta-diag" href="#diagnostico" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; min-height: 50px; padding: 8px 20px 8px 8px; box-sizing: border-box; border-radius: 999px; font-size: 15px; font-weight: 800; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 32px; height: 32px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>Consultoria gratuita</a>
-</div>
-</div>
-</div>
-</section>
-
-<section style="background: #121E34">
-<div style="max-width: 1240px; margin: 0 auto; box-sizing: border-box; padding: clamp(64px, 7vw, 104px) clamp(20px, 4vw, 32px)">
-<div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 40px 64px">
-<div style="flex: 1 1 400px; min-width: 0">
-<div style="display: flex; align-items: center; gap: 12px; color: #C9A74D; font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase"><span style="flex: none; width: 28px; height: 1px; background: #C9A74D"></span>Por que a Nordosudo</div>
-<h2 style="margin: 16px 0 0; max-width: 520px; font-size: clamp(28px, 3vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; color: #F5F0E4">O que muda quando sua exportação é estruturada com a <span style="color: #C9A74D">Nordosudo</span></h2>
-<div class="rv" style="margin-top: 36px; position: relative; aspect-ratio: 1 / 1; border-radius: 24px; overflow: hidden; background: #172641; border: 1px solid rgba(201, 167, 77, 0.22)">
-<img class="kb" src="assets/beneficios-reuniao.jpg" loading="lazy" decoding="async" alt="Reunião de planejamento de exportação com vista para o porto" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; display: block">
-</div>
-</div>
-<div style="flex: 1 1 560px; min-width: 0">
-<ul class="list-rv" style="list-style: none; margin: 0; padding: 0">
-<li style="display: flex; align-items: flex-start; gap: 18px; padding: 0 0 22px; border-bottom: 1px solid rgba(201, 167, 77, 0.14)">
-<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg></span>
-<div style="min-width: 0">
-<h3 style="margin: 0; font-size: 19px; line-height: 1.35; font-weight: 800; color: #F5F0E4">Segurança regulatória</h3>
-<p style="margin: 6px 0 0; font-size: 15.5px; line-height: 1.6; color: #C9D0DC">Documentos, registros e certificações validados por especialistas antes do embarque, para reduzir o risco de multas e retenções.</p>
-</div>
-</li>
-<li style="display: flex; align-items: flex-start; gap: 18px; padding: 22px 0; border-bottom: 1px solid rgba(201, 167, 77, 0.14)">
-<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></span>
-<div style="min-width: 0">
-<h3 style="margin: 0; font-size: 19px; line-height: 1.35; font-weight: 800; color: #F5F0E4">Agilidade</h3>
-<p style="margin: 6px 0 0; font-size: 15.5px; line-height: 1.6; color: #C9D0DC">Metodologia testada que encurta o setup de meses para semanas — em média, 4 a 8 semanas, conforme produto e mercado.</p>
-</div>
-</li>
-<li style="display: flex; align-items: flex-start; gap: 18px; padding: 22px 0; border-bottom: 1px solid rgba(201, 167, 77, 0.14)">
-<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg></span>
-<div style="min-width: 0">
-<h3 style="margin: 0; font-size: 19px; line-height: 1.35; font-weight: 800; color: #F5F0E4">Previsibilidade de custos</h3>
-<p style="margin: 6px 0 0; font-size: 15.5px; line-height: 1.6; color: #C9D0DC">Landed cost completo e margem real calculados antes de qualquer negociação. Você negocia sabendo quanto vai ganhar.</p>
-</div>
-</li>
-<li style="display: flex; align-items: flex-start; gap: 18px; padding: 22px 0; border-bottom: 1px solid rgba(201, 167, 77, 0.14)">
-<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
-<div style="min-width: 0">
-<h3 style="margin: 0; font-size: 19px; line-height: 1.35; font-weight: 800; color: #F5F0E4">Parceiros que conhecem o seu setor</h3>
-<p style="margin: 6px 0 0; font-size: 15.5px; line-height: 1.6; color: #C9D0DC">Agentes de carga, despachantes e seguradoras que já conhecem o seu tipo de produto e o seu mercado de destino.</p>
-</div>
-</li>
-<li style="display: flex; align-items: flex-start; gap: 18px; padding: 22px 0">
-<span style="flex: none; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round"><circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path><circle cx="12" cy="12" r="4"></circle></svg></span>
-<div style="min-width: 0">
-<h3 style="margin: 0; font-size: 19px; line-height: 1.35; font-weight: 800; color: #F5F0E4">Companhia na primeira operação</h3>
-<p style="margin: 6px 0 0; font-size: 15.5px; line-height: 1.6; color: #C9D0DC">Acompanhamento real nos primeiros embarques. Você não fica sozinho quando a carga sai.</p>
-</div>
-</li>
-</ul>
-<div style="margin-top: 20px">
-<a class="cta shine cta-diag" href="#diagnostico" style="display: inline-flex; align-items: center; gap: 12px; min-height: 54px; padding: 10px 24px 10px 10px; box-sizing: border-box; border-radius: 999px; font-size: 16px; font-weight: 800; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>Consultoria gratuita</a>
-</div>
 </div>
 </div>
 </div>
@@ -610,7 +613,7 @@ html{scroll-behavior:smooth}
 <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 12px">
 <details open style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>O BoraExportar é só para quem já tem comprador?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
-<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Não. Ele é ideal para quem já tem demanda internacional confirmada ou interesse de compradores. Se você quer exportar e ainda não tem cliente, avaliamos juntos o melhor caminho — é só <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">fazer o diagnóstico</a>.</p>
+<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Não. Ele é ideal para quem já tem demanda internacional confirmada ou interesse de compradores. Se você quer exportar e ainda não tem cliente, avaliamos juntos o melhor caminho — é só <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">pedir sua consultoria gratuita</a>.</p>
 </details>
 <details style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>Minha empresa nunca exportou. O BoraExportar serve para mim?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
@@ -626,7 +629,7 @@ html{scroll-behavior:smooth}
 </details>
 <details style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>Quanto custa o BoraExportar?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
-<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">O investimento varia conforme o escopo: produtos, mercados e complexidade regulatória. <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">Faça o diagnóstico</a>, conte sobre seu produto e o mercado que quer atender, e preparamos um orçamento personalizado.</p>
+<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">O investimento varia conforme o escopo: produtos, mercados e complexidade regulatória. <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">Peça sua consultoria gratuita</a>, conte sobre seu produto e o mercado que quer atender, e preparamos um orçamento personalizado.</p>
 </details>
 <details style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>Vocês encontram compradores no exterior para mim?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
@@ -634,11 +637,15 @@ html{scroll-behavior:smooth}
 </details>
 <details style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>Vocês atendem qualquer setor?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
-<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Sim. Nossa equipe tem experiência em setores como alimentos, bebidas não alcoólicas, cosméticos, madeira e setor elétrico, e as exigências de cada mercado mudam conforme o produto. Para entender o seu caso, <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">faça o diagnóstico</a> e avaliamos juntos o melhor caminho.</p>
+<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Sim. Nossa equipe tem experiência em setores como alimentos, bebidas não alcoólicas, cosméticos, madeira e setor elétrico, e as exigências de cada mercado mudam conforme o produto. Para entender o seu caso, <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">peça sua consultoria gratuita</a> e avaliamos juntos o melhor caminho.</p>
+</details>
+<details style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
+<summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>A consultoria gratuita tem algum compromisso?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
+<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Não. Na consultoria, um especialista entende o momento da sua empresa e indica o próximo passo. Se fizer sentido seguir com a Nordosudo, preparamos um orçamento personalizado; se não, você sai com a orientação do mesmo jeito.</p>
 </details>
 <details style="box-sizing: border-box; padding: 0 24px; border-radius: 16px; background: #172641; border: 1px solid rgba(201, 167, 77, 0.16)">
 <summary style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0; font-size: 17px; line-height: 1.45; font-weight: 700; color: #F5F0E4"><span>Como funciona o primeiro contato?</span><span class="faq-icon" style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(201, 167, 77, 0.12); color: #C9A74D; transition: transform 0.2s ease"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></span></summary>
-<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Você <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">responde o diagnóstico</a>, com 6 perguntas rápidas sobre seu produto e seu momento, ou <a href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="color: #C9A74D; font-weight: 600">chama no WhatsApp</a>. Nossa equipe agenda uma conversa para entender o cenário e indicar o próximo passo, sem compromisso.</p>
+<p style="margin: 0; padding: 0 0 22px; font-size: 16px; line-height: 1.65; color: #C9D0DC">Você <a href="#diagnostico" style="color: #C9A74D; font-weight: 600">responde o diagnóstico</a>, com 5 perguntas rápidas sobre seu produto e seu momento, ou <a href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="color: #C9A74D; font-weight: 600">chama no WhatsApp</a>. Nossa equipe agenda sua consultoria gratuita para entender o cenário e indicar o próximo passo, sem compromisso.</p>
 </details>
 </div>
 </div>
@@ -662,7 +669,7 @@ html{scroll-behavior:smooth}
 <div style="position: relative">
 <img class="float" src="assets/icone-nordosudo.png" loading="lazy" decoding="async" alt="" style="width: 56px; height: auto; display: block; margin: 0 auto">
 <h2 style="margin: 24px auto 0; max-width: 760px; font-size: clamp(28px, 3vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; color: #F5F0E4">Sua empresa está pronta para exportar? <span style="color: #C9A74D">Vamos descobrir juntos.</span></h2>
-<p style="margin: 18px auto 0; max-width: 640px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.7; color: #C9D0DC">Responda 6 perguntas rápidas sobre seu produto e o mercado que você quer atender. Um especialista da Nordosudo te chama no WhatsApp para entender seu momento e indicar o próximo passo.</p>
+<p style="margin: 18px auto 0; max-width: 640px; font-size: clamp(17px, 1.3vw, 19px); line-height: 1.7; color: #C9D0DC">Leva 1 minuto: responda 5 perguntas sobre seu produto e o mercado que você quer atender, e te chamamos no WhatsApp para agendar sua consultoria gratuita.</p>
 <div style="margin-top: 32px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px">
 <a class="cta shine cta-diag" href="#diagnostico" style="display: inline-flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 28px 12px 12px; box-sizing: border-box; border-radius: 999px; font-size: 17px; font-weight: 800; line-height: 1.3; text-decoration: none"><span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: rgba(18, 30, 52, 0.12); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg></span>Consultoria gratuita</a>
 <a class="cta shine" href="https://wa.me/5511943971961?text=Ol%C3%A1%21%20Gostaria%20de%20marcar%20uma%20consultoria%20gratuita%20para%20exporta%C3%A7%C3%A3o." target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 28px 12px 12px; box-sizing: border-box; border-radius: 999px; background: linear-gradient(135deg, #1C9F50 0%, #11873F 30%, #0A6837 100%); color: #FFFFFF; font-size: 17px; font-weight: 800; line-height: 1.3; text-decoration: none; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); box-shadow: 0 14px 32px rgba(17, 135, 63, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.22)"><span style="flex: none; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.18); display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>Prefiro o WhatsApp</a>
@@ -736,7 +743,7 @@ html{scroll-behavior:smooth}
     evento('diagnostico_etapa', {'etapa': n, 'pergunta': p.getAttribute('data-passo')});
     if (form.getBoundingClientRect().top < 0) form.scrollIntoView({block: 'start'});
     if (focar) {
-      var campo = p.querySelector('input:not([type="radio"])') || p.querySelector('input:checked') || p.querySelector('input');
+      var campo = p.querySelector('input[type="radio"]:checked') || p.querySelector('input[type="radio"]') || p.querySelector('input');
       campo.focus();
     }
   }
@@ -779,7 +786,7 @@ html{scroll-behavior:smooth}
       'WhatsApp': valor('whatsapp'),
       'Já exporta': valor('ja_exporta'),
       'Segmento': valor('segmento'),
-      'Produto': valor('produto'),
+      'Produto': valor('produto') || 'não informado',
       'Mercado': valor('mercado'),
       'Chamar no WhatsApp': 'https://wa.me/55' + telefone(valor('whatsapp')),
       'Palavra-chave do anúncio': params.get('utm_term') || '',
@@ -801,7 +808,7 @@ html{scroll-behavior:smooth}
   }
 
   function fim(ok, d) {
-    [].forEach.call(form.querySelectorAll('.diag-sub, .diag-prog, .diag-passo, .diag-acoes, .diag-aviso, .diag-rodape'), function (el) {
+    [].forEach.call(form.querySelectorAll('.diag-sub, .diag-prog, .diag-passo, .diag-acoes, .diag-aviso'), function (el) {
       el.hidden = true;
     });
     var painel = form.querySelector(ok ? '.diag-ok' : '.diag-falha');
@@ -840,7 +847,8 @@ html{scroll-behavior:smooth}
     });
   }
 
-  // Toque ou clique numa opção já avança; pelo teclado, a pessoa confirma em "Continuar"
+  // Toque ou clique numa opção já avança, menos no passo com campo opcional (o produto);
+  // pelo teclado, a pessoa confirma em "Continuar"
   form.addEventListener('pointerdown', function (e) {
     porPonteiro = !!(e.target.closest && e.target.closest('.diag-op'));
   });
@@ -853,7 +861,9 @@ html{scroll-behavior:smooth}
     });
     passos[atual].querySelector('.diag-erro').textContent = '';
     if (!iniciou) { iniciou = true; evento('diagnostico_inicio'); }
-    if (porPonteiro) {
+    var extra = passos[atual].querySelector('.diag-extra');
+    if (extra) extra.hidden = false;
+    if (porPonteiro && !extra) {
       var idx = atual;
       setTimeout(function () { if (atual === idx && !enviando) avancar(); }, 260);
     }
@@ -883,7 +893,7 @@ html{scroll-behavior:smooth}
     setTimeout(function () { document.getElementById('diag-titulo').focus({preventScroll: true}); }, 450);
   });
 
-  // O botão flutuante do WhatsApp some onde a página já mostra o WhatsApp: no topo (com o formulário) e no fechamento
+  // O botão flutuante do WhatsApp some no topo, para não competir com o formulário, e no fechamento, que já tem o WhatsApp
   var fab = document.querySelector('.fab');
   if (fab && 'IntersectionObserver' in window) {
     var naTela = [];
