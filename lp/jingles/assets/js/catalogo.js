@@ -49,6 +49,18 @@
     return i < 0 ? ORDEM_IDIOMA[loc].length : i;
   }
 
+  function hrefProva(prova) {
+    var href = prova && prova.href;
+    var alvo = href && typeof href === "object" ? (href[loc] || href.pt) : href;
+    var padrao = { pt: "#depoimentos", es: "#testimonios", en: "#testimonials" }[loc];
+
+    /* O link só vale se apontar para uma âncora que existe nesta página:
+       o id da seção de depoimentos é traduzido em cada idioma. */
+    if (alvo && alvo.charAt(0) === "#" && document.getElementById(alvo.slice(1))) return alvo;
+    if (document.getElementById(padrao.slice(1))) return padrao;
+    return "";
+  }
+
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
@@ -66,8 +78,13 @@
   function itemHTML(item) {
     var msg = ROT.msgModelo.replace("{titulo}", item.titulo);
     var href = waLink(ROT.whatsapp, msg);
+    var provaHref = item.prova ? hrefProva(item.prova) : "";
+    var prova = provaHref
+      ? '<a class="card-proof" href="' + esc(provaHref) + '" data-acao="prova">' +
+          esc(item.prova.rotulo[loc]) + '</a>'
+      : '';
     return '' +
-      '<article class="card" data-cat="' + esc(item.categoria) + '" data-id="' + esc(item.id) + '">' +
+      '<article class="card" id="musica-' + esc(item.id) + '" data-cat="' + esc(item.categoria) + '" data-id="' + esc(item.id) + '">' +
         '<img class="cover" src="' + esc(base + item.capa) + '" alt="' + esc(txt.alt[loc] + item.titulo) + '"' +
         ' width="1000" height="1000" loading="lazy" decoding="async">' +
         '<div class="card-body">' +
@@ -86,6 +103,7 @@
           '<div class="card-links">' +
             '<a href="' + esc(base + item.letra) + '" target="_blank" rel="noopener" data-acao="letra">' +
               esc(ROT.letra[loc]) + '</a>' +
+            prova +
             '<a class="card-cta" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer" data-acao="wa">' +
               esc(item.cta[loc]) + '</a>' +
           '</div>' +
@@ -105,9 +123,10 @@
     });
 
     Array.prototype.forEach.call(cardsEl.querySelectorAll("[data-acao]"), function (a) {
+      var EVENTOS = { wa: "clicar_whatsapp", letra: "abrir_letra", prova: "abrir_depoimento" };
       a.addEventListener("click", function () {
         var card = a.closest(".card");
-        track(a.dataset.acao === "wa" ? "clicar_whatsapp" : "abrir_letra", {
+        track(EVENTOS[a.dataset.acao] || "abrir_letra", {
           item_id: card ? card.dataset.id : "",
           origem: "portfolio"
         });
@@ -135,6 +154,29 @@
     }
   }
 
+  /* Os cards nascem depois do fetch: se a URL chega com #musica-…, o navegador
+     não tem para onde rolar. Reposicionamos depois de renderizar e liberamos
+     filtros que possam deixar o card escondido. */
+  function focarHash() {
+    if (!location.hash || location.hash.length < 2) return;
+    var id;
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch (e) { id = location.hash.slice(1); }
+    var alvo = document.getElementById(id);
+    if (!alvo || !cardsEl.contains(alvo)) return;
+
+    if (alvo.hasAttribute("hidden")) {
+      var todas = document.querySelector('.btn-filter[data-filter="todas"]');
+      Array.prototype.forEach.call(document.querySelectorAll(".btn-filter"), function (b) {
+        b.setAttribute("aria-pressed", b === todas ? "true" : "false");
+      });
+      aplicarFiltro("todas");
+    }
+
+    if (!alvo.hasAttribute("tabindex")) alvo.setAttribute("tabindex", "-1");
+    alvo.scrollIntoView({ block: "start" });
+    alvo.focus({ preventScroll: true });
+  }
+
   function buildFilters() {
     var box = document.getElementById("filtros");
     if (!box) return;
@@ -154,6 +196,8 @@
       track("filtrar_categoria", { categoria: btn.dataset.filter });
     });
   }
+
+  window.addEventListener("hashchange", focarHash);
 
   fetch(base + "assets/catalogo.json", { cache: "no-cache" })
     .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
@@ -175,6 +219,7 @@
         });
       buildFilters();
       render(itens);
+      focarHash();
     })
     .catch(function (err) {
       console.error("catalogo.json:", err);

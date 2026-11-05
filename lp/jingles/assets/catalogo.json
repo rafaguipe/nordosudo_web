@@ -1,6 +1,6 @@
 {
-  "versao": 1,
-  "atualizado": "2026-11-03",
+  "versao": 2,
+  "atualizado": "2026-11-05",
   "whatsapp": "5511943971961",
   "msg_modelo": {
     "pt": "Olá! Ouvi {titulo} no site da Nordosudo e quero uma música personalizada.",
@@ -133,6 +133,27 @@
         "en": "A heartfelt tribute to family memories, familiar flavors, and the moments shared around Grandma Dídia."
       },
       "cta": { "pt": "Quero homenagear alguém ↗", "es": "Quiero homenajear a alguien ↗", "en": "I want to honor someone ↗" }
+    },
+    {
+      "id": "parcela-que-cabe-no-bolso",
+      "ordem": 8,
+      "publicado": true,
+      "titulo": "Parcela que Cabe no Bolso",
+      "categoria": "empresas",
+      "idioma": "pt",
+      "duracao": "28 s",
+      "capa": "assets/webp/parcela-que-cabe-no-bolso.webp",
+      "audio": "assets/parcela-que-cabe-no-bolso.mp3",
+      "letra": "assets/parcela-que-cabe-no-bolso-letra.pdf",
+      "estilo": { "pt": "Comercial · Imobiliário", "es": "Comercial · Inmobiliario", "en": "Commercial · Real estate" },
+      "descricao": {
+        "pt": "Um sertanejo alegre e marcante para divulgar terrenos e o sonho de construir a casa própria.",
+        "es": "Un sertanejo brasileño alegre y pegadizo, creado para promocionar terrenos y el sueño de construir la casa propia.",
+        "en": "An upbeat Brazilian country-pop jingle promoting residential lots and the dream of building a home."
+      },
+      "prova": { "href": { "pt": "#depoimentos", "es": "#testimonios", "en": "#testimonials" },
+                 "rotulo": { "pt": "Ver o depoimento do cliente ↗", "es": "Ver el testimonio del cliente ↗", "en": "Read the client’s testimonial ↗" } },
+      "cta": { "pt": "Quero um jingle para meu negócio ↗", "es": "Quiero un jingle para mi negocio ↗", "en": "I want a jingle for my business ↗" }
     },
     {
       "id": "halloween-canada",
